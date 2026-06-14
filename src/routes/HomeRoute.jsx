@@ -215,7 +215,7 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
         <div style={{ background: "rgba(250,247,255,0.85)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderRadius: 20, border: "1.5px solid #e0d0fd", padding: "28px 36px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, boxShadow: "0 4px 20px rgba(92,34,212,0.08), inset 0 1px 0 rgba(255,255,255,0.8)" }}>
           <div>
             <p style={{ fontSize: 12, fontWeight: 700, color: "#9898a8", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 6 }}>Made with ❤️ by</p>
-            <p style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 18, fontWeight: 800, color: "#14141f", margin: 0 }}>Anas, Ayana &amp; Sakshi</p>
+            <p style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 18, fontWeight: 800, color: "#14141f", margin: 0 }}>Anas, Kaif &amp; Sakshi</p>
             <p style={{ fontSize: 13, color: "#9898a8", margin: "4px 0 0" }}>Campus Marketplace — Galgotias University</p>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
