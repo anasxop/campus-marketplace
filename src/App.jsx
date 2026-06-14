@@ -50,7 +50,9 @@ const navigateTo = (path) => { window.location.hash = path; };
 // ─── Feature flag: set to true to re-enable email verification UI & enforcement
 const EMAIL_VERIFICATION_ENABLED = false;
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5001";
+const API_BASE_URL =
+  (import.meta.env.VITE_API_URL || "http://127.0.0.1:5001")
+    .replace(/\/+$/, "");
 const socket = io(API_BASE_URL, { autoConnect: false, transports: ["polling", "websocket"] });
 const sortConversations = (items) =>
   [...items].sort((a, b) => new Date(b.lastMessageAt||0) - new Date(a.lastMessageAt||0));
