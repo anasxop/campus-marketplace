@@ -1264,9 +1264,7 @@ export default function App() {
         /* ══════════════════════════════════════════════════════════════════
            Responsive: Tablet (≤900px)
            ══════════════════════════════════════════════════════════════════ */
-        @media (min-width: 641px) {
-          .home-category-grid > div { aspect-ratio: 1.4 / 1; }
-        }
+        @media (max-width: 900px) {
           .item-detail-grid { grid-template-columns: 1fr !important; }
           .pub-profile-grid { grid-template-columns: 1fr !important; }
           .browse-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; }
@@ -1362,9 +1360,9 @@ export default function App() {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px !important;
           }
-          /* Kill the aspect ratio that forces cards too wide on tiny screens */
+          /* Override the inline aspectRatio so cards don't become giant on narrow screens */
           .home-category-grid > div {
-            aspect-ratio: auto !important;
+            aspect-ratio: unset !important;
             min-height: 130px !important;
             padding: 20px 16px !important;
           }
