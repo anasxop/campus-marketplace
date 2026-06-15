@@ -170,7 +170,7 @@ export default function ProfileRoute({
   const [googleMsg,     setGoogleMsg]     = useState("");
   const [googleErr,     setGoogleErr]     = useState("");
 
-  const hasPassword = !!user?.hasPassword || user?.authProvider === "email";
+  const hasPassword = !!user?.hasPassword;
   const hasGoogle   = !!user?.googleId;
 
   // ── Sync with user prop if it changes externally (e.g. after Google link/unlink) ──
