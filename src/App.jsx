@@ -434,7 +434,8 @@ export default function App() {
   };
 
   const handleChangePassword = async ({ currentPassword, newPassword }) => {
-    await changePassword(sessionToken, { currentPassword, newPassword });
+    const result = await changePassword(sessionToken, { currentPassword, newPassword });
+    if (result?.user) setCurrentUser(result.user);
   };
 
   const handleLinkGoogle = async (credential) => {
