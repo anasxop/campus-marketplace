@@ -72,15 +72,6 @@ const BADGE_DEFS = [
     isRate: true,
   },
   {
-    id: "deal_maker",
-    icon: "🤝",
-    label: "Deal Maker",
-    desc: "Complete 5 transactions",
-    metric: (d) => d.seller.successfulTransactions,
-    target: 5,
-    unit: "transaction",
-  },
-  {
     id: "power_lister",
     icon: "📦",
     label: "Power Lister",
@@ -856,10 +847,9 @@ export default function DashboardRoute({ user, sessionToken, onStatusChange, ope
                   <div style={{ fontSize: 12, fontWeight: 600, color: t.gray600, marginBottom: 6 }}>Seller Rating</div>
                   <Stars rating={seller.avgRating} size={15} />
                   <div style={{ fontSize: 11, color: t.gray400, marginTop: 4 }}>
-                    {seller.totalReviews === 0 ? "No reviews yet — complete a transaction." : `${seller.totalReviews} review${seller.totalReviews !== 1 ? "s" : ""}`}
+                    {seller.totalReviews === 0 ? "No reviews yet." : `${seller.totalReviews} review${seller.totalReviews !== 1 ? "s" : ""}`}
                   </div>
                 </div>
-                <SellerStat icon="🤝" label="Transactions" value={seller.successfulTransactions} sub="Completed" accent={t.green700} />
               </div>
             </div>
 

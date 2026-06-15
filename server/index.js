@@ -1515,7 +1515,6 @@ app.get("/api/dashboard", async (req, res) => {
         avgResponseTimeMinutes,
         totalReviews,
         avgRating,
-        successfulTransactions: soldListings,
       },
       profileAnalytics: {
         totalVisits: totalProfileVisits,

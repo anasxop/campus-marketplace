@@ -306,7 +306,7 @@ export default function PublicProfileRoute({
       label: "Trusted Member", emoji: "🛡️",
       color: "#5c22d4", bg: "linear-gradient(135deg,#f3ecfe,#ece0fd)", border: "#e0d0fd",
     },
-    // Verified Seller: has at least 1 completed review (real transaction evidence)
+    // Verified Seller: has at least 1 completed review
     reviewCount >= 1 && {
       label: "Verified Seller", emoji: "✅",
       color: "#065f46", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)", border: "#6ee7b7",
@@ -473,11 +473,6 @@ export default function PublicProfileRoute({
                 label="Avg Response Time"
                 value={formatResponseTime(serverStats.avgResponseTimeMinutes) || "Not enough data"}
               />
-              <InsightRow
-                icon="✅"
-                label="Successful Transactions"
-                value={soldListings.length === 0 ? "0" : soldListings.length}
-              />
               <InsightRow icon="📦" label="Total Listings" value={userListings.length} />
 
               {/* Profile visits — only shown on own profile */}
@@ -522,7 +517,7 @@ export default function PublicProfileRoute({
                   <div style={{ textAlign: "center", padding: "48px 32px", background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec" }}>
                     <div style={{ fontSize: 40, marginBottom: 12 }}>⭐</div>
                     <p style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, color: "#14141f", fontSize: 16 }}>No reviews yet</p>
-                    <p style={{ color: "#9898a8", fontSize: 13, marginTop: 6 }}>Reviews appear here after successful transactions.</p>
+                    <p style={{ color: "#9898a8", fontSize: 13, marginTop: 6 }}>Reviews appear here after a sale is completed.</p>
                   </div>
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
