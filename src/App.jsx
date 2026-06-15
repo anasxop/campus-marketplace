@@ -1283,6 +1283,7 @@ export default function App() {
           .nav-desktop-right { display: none !important; }
           .nav-campus-desktop { display: none !important; }
           .nav-mobile-right  { display: flex !important; }
+          .nav-logo { padding-left: 10px !important; }
         }
         @media (min-width: 769px) {
           .nav-mobile-drawer { display: none !important; }
