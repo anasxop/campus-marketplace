@@ -562,10 +562,8 @@ export default function App() {
           Campus<span style={{ color: "#fcd34d" }}>Marketplace</span>
         </span>
 
-        {/* Desktop: campus selector + nav links */}
-        <div className="nav-desktop-right" style={{ display: "flex", alignItems: "center", gap: 4, flex: 1, justifyContent: "flex-end" }}>
-          {/* Campus selector */}
-          <div className="nav-campus-selector" style={{ position: "relative", marginRight: 4 }}>
+        {/* Desktop: campus selector sits between logo and nav links */}
+        <div className="nav-campus-selector nav-campus-desktop" style={{ position: "relative", flexShrink: 0 }}>
             <div
               className="nav-campus-trigger"
               style={{
@@ -592,7 +590,7 @@ export default function App() {
 
             {campusDropdownOpen && (
               <div className="nav-campus-menu" style={{
-                position: "absolute", top: "calc(100% + 8px)", right: 0,
+                position: "absolute", top: "calc(100% + 8px)", left: 0,
                 background: "#fff", borderRadius: 14,
                 border: "1.5px solid #e0d0fd",
                 boxShadow: "0 16px 48px rgba(92,34,212,0.18)",
@@ -649,8 +647,8 @@ export default function App() {
             )}
           </div>
 
-          {/* Desktop nav links */}
-          <div style={s.navLinks} className="nav-links-desktop">
+        {/* Desktop nav links (right side) */}
+        <div className="nav-desktop-right" style={{ display: "flex", alignItems: "center", gap: 4, marginLeft: "auto" }}>
             {navItems.map(item => {
               const isActive = item.matchPages ? item.matchPages.includes(route.page) : route.page === item.key;
               const isHov = navHovered === item.key;
@@ -765,7 +763,6 @@ export default function App() {
               <IconLogout /> <span>Logout</span>
             </button>
           </div>
-        </div>
 
         {/* Mobile right side: bell + hamburger only */}
         <div className="nav-mobile-right" style={{ display: "none", alignItems: "center", gap: 6, flexShrink: 0 }}>
@@ -1284,6 +1281,7 @@ export default function App() {
            ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 768px) {
           .nav-desktop-right { display: none !important; }
+          .nav-campus-desktop { display: none !important; }
           .nav-mobile-right  { display: flex !important; }
         }
         @media (min-width: 769px) {
@@ -1420,6 +1418,10 @@ export default function App() {
           }
           .pub-stat-row { flex-wrap: wrap !important; }
           .pub-profile-actions button { width: 100% !important; justify-content: center !important; }
+          /* Back + "your public profile" badge: stack on mobile */
+          .pubprofile-hero-topbar { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+          .pubprofile-hero-topbar button,
+          .pubprofile-hero-topbar > div { margin-bottom: 0 !important; margin-left: 0 !important; }
 
           /* ── Profile ─────────────────────────────────────────────────── */
           .profile-hero { padding: 24px 16px 64px !important; }

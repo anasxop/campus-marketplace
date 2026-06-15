@@ -64,7 +64,7 @@ export default function ChatsRoute({
     }}>
 
       {/* ── Sidebar ── */}
-      <aside style={{
+      <aside className="chat-sidebar" style={{
         background: "#fff", borderRight: "1px solid #e5e5ec",
         display: "flex", flexDirection: "column", overflow: "hidden",
         boxShadow: "2px 0 16px rgba(14,0,40,0.04)",
@@ -170,7 +170,7 @@ export default function ChatsRoute({
       </aside>
 
       {/* ── Chat panel ── */}
-      <section style={{ display: "flex", flexDirection: "column", overflow: "hidden", background: "#f9f9fb" }}>
+      <section className="chat-section" style={{ display: "flex", flexDirection: "column", overflow: "hidden", background: "#f9f9fb" }}>
         {!currentConversation ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 12, textAlign: "center", padding: 40 }}>
             <div style={{ width: 80, height: 80, borderRadius: 24, background: "linear-gradient(135deg, #f3ecfe, #ece0fd)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, marginBottom: 8, boxShadow: "0 8px 32px rgba(92,34,212,0.12)" }}>💬</div>
@@ -393,6 +393,25 @@ export default function ChatsRoute({
       <style>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+          .chat-layout {
+            grid-template-columns: 1fr !important;
+            height: calc(100dvh - 56px) !important;
+            position: relative;
+          }
+          /* When showing list: hide the chat section */
+          .chat-layout[data-mobile-view="list"] section.chat-section {
+            display: none !important;
+          }
+          /* When showing chat: hide the sidebar */
+          .chat-layout[data-mobile-view="chat"] aside.chat-sidebar {
+            display: none !important;
+          }
+          .chat-back-btn {
+            display: inline-flex !important;
+          }
+          .chat-bubble-wrap { max-width: 82% !important; }
         }
       `}</style>
     </div>

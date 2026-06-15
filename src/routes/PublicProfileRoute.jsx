@@ -345,6 +345,7 @@ export default function PublicProfileRoute({
         <div style={{ position: "absolute", top: -80, right: -80, width: 320, height: 320, borderRadius: "50%", background: "rgba(252,211,77,0.06)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -40, left: "30%", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <div className="pubprofile-hero-topbar" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <button
             style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)", fontSize: 13, fontWeight: 600, padding: "7px 16px", borderRadius: 10, cursor: "pointer", fontFamily: "'DM Sans', system-ui, sans-serif", backdropFilter: "blur(8px)", marginBottom: 20, transition: "all 160ms ease" }}
             onClick={navigateBack}
@@ -354,10 +355,11 @@ export default function PublicProfileRoute({
             ← Back
           </button>
           {isOwnProfile && (
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(252,211,77,0.15)", border: "1px solid rgba(252,211,77,0.35)", color: "#fde68a", fontSize: 11, fontWeight: 700, padding: "4px 14px", borderRadius: 999, letterSpacing: "0.10em", textTransform: "uppercase", marginLeft: 12 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(252,211,77,0.15)", border: "1px solid rgba(252,211,77,0.35)", color: "#fde68a", fontSize: 11, fontWeight: 700, padding: "4px 14px", borderRadius: 999, letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 20 }}>
               👁️ Your public profile
             </div>
           )}
+          </div>
         </div>
       </div>
 
