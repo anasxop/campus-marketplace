@@ -270,6 +270,7 @@ const serializeUser = (user) => ({
   isAdmin: !!user.isAdmin,
   // When EMAIL_VERIFICATION_ENABLED is false, all users are treated as verified
   emailVerified: EMAIL_VERIFICATION_ENABLED ? (user.emailVerified || false) : true,
+  hasPassword: !!user.passwordHash,
 });
 
 const getSellerRatingStats = async (sellerId) => {
@@ -986,7 +987,7 @@ app.post("/api/auth/change-password", async (req, res) => {
   }
   user.passwordHash = await bcrypt.hash(newPassword, 10);
   await user.save();
-  return res.json({ message: "Password changed successfully." });
+  return res.json({ message: "Password changed successfully.", user: serializeUser(user) });
 });
 
 // ─── Link / Unlink Google ───────────────────────────────────────────────────
