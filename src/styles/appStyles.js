@@ -88,6 +88,9 @@ export const styles = {
     top: 0,
     zIndex: 100,
     boxShadow: "0 1px 0 rgba(14,0,40,0.04)",
+    width: "100%",
+    boxSizing: "border-box",
+    overflow: "visible",
   },
 
   logo: {

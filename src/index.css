@@ -85,11 +85,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body { margin: 0; overflow-x: hidden; width: 100%; }
+html, body { margin: 0; overflow-x: hidden; width: 100%; min-width: 0; }
 
 #root {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   margin: 0;
   min-height: 100svh;
   display: flex;
@@ -189,6 +190,17 @@ img, svg, video, canvas {
 /* Very small phones (≤360px) */
 @media (max-width: 360px) {
   :root { font-size: 14px; }
+}
+
+/* Prevent flex children from overflowing their containers */
+/* (default min-width on flex items is auto, which allows overflow) */
+@media (max-width: 768px) {
+  .nav-logo,
+  .nav-campus-selector,
+  .nav-mobile-right {
+    flex-shrink: 0;
+    min-width: 0;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

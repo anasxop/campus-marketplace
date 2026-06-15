@@ -120,6 +120,8 @@ export default function App() {
   const [notifPanelOpen, setNotifPanelOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notifUnread, setNotifUnread] = useState(0);
+  // Mobile hamburger menu state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const syncRoute = () => setRoute(parseHashRoute());
@@ -130,10 +132,15 @@ export default function App() {
 
   // Close notification panel on Escape
   useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") setNotifPanelOpen(false); };
+    const onKey = (e) => {
+      if (e.key === "Escape") { setNotifPanelOpen(false); setMobileMenuOpen(false); }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { setMobileMenuOpen(false); }, [route.page]);
 
   // Fetch real stats for homepage
   useEffect(() => {
@@ -537,6 +544,7 @@ export default function App() {
 
   return (
     <div style={s.page}>
+      {/* ── NAVBAR ── */}
       <nav style={{
         ...s.nav,
         backdropFilter: "blur(20px)",
@@ -545,13 +553,19 @@ export default function App() {
         borderBottom: "1px solid rgba(92,34,212,0.10)",
         boxShadow: "0 2px 24px rgba(92,34,212,0.08)",
         position: "sticky", top: 0, zIndex: 100,
+        padding: "0 24px",
+        height: 60,
       }}>
-        <div className="nav-left" style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span className="nav-logo" style={{ ...s.logo, cursor: "pointer" }} onClick={() => { navigateTo("/home"); window.scrollTo({ top: 0, behavior: "instant" }); }}>
-            Campus<span style={{ color: "#fcd34d" }}>Marketplace</span>
-          </span>
+        {/* Logo */}
+        <span className="nav-logo" style={{ ...s.logo, cursor: "pointer", flexShrink: 0 }}
+          onClick={() => { navigateTo("/home"); window.scrollTo({ top: 0, behavior: "instant" }); }}>
+          Campus<span style={{ color: "#fcd34d" }}>Marketplace</span>
+        </span>
 
-          <div className="nav-campus-selector" style={{ position: "relative" }}>
+        {/* Desktop: campus selector + nav links */}
+        <div className="nav-desktop-right" style={{ display: "flex", alignItems: "center", gap: 4, flex: 1, justifyContent: "flex-end" }}>
+          {/* Campus selector */}
+          <div className="nav-campus-selector" style={{ position: "relative", marginRight: 4 }}>
             <div
               className="nav-campus-trigger"
               style={{
@@ -568,17 +582,17 @@ export default function App() {
               onMouseLeave={e => e.currentTarget.style.background = "linear-gradient(135deg, #f3ecfe, #faf7ff)"}
             >
               <IconPin />
-              <span className="nav-campus-trigger-label" style={{ maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span className="nav-campus-trigger-label" style={{ maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {selectedCampus}
               </span>
-              <div style={{ transform: campusDropdownOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 200ms ease" }}>
+              <div style={{ transform: campusDropdownOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 200ms ease", flexShrink: 0 }}>
                 <IconChevDown />
               </div>
             </div>
 
             {campusDropdownOpen && (
               <div className="nav-campus-menu" style={{
-                position: "absolute", top: "calc(100% + 8px)", left: 0,
+                position: "absolute", top: "calc(100% + 8px)", right: 0,
                 background: "#fff", borderRadius: 14,
                 border: "1.5px solid #e0d0fd",
                 boxShadow: "0 16px 48px rgba(92,34,212,0.18)",
@@ -588,7 +602,6 @@ export default function App() {
               }}
               onClick={e => e.stopPropagation()}
               >
-                {/* Search input */}
                 <div style={{ padding: "10px 12px", borderBottom: "1px solid #f0ebfc" }}>
                   <input
                     type="text"
@@ -635,42 +648,61 @@ export default function App() {
               </div>
             )}
           </div>
-        </div>
 
-        <div style={s.navLinks} className="nav-links-wrap">
-          {navItems.map(item => {
-            const isActive = item.matchPages ? item.matchPages.includes(route.page) : route.page === item.key;
-            const isHov = navHovered === item.key;
-            if (item.cta) return (
-              <button key={item.key}
-                className="nav-cta-label"
-                style={{
-                  display: "flex", alignItems: "center", gap: 7,
-                  background: isHov
-                    ? "linear-gradient(135deg, #4318a0, #5c22d4)"
-                    : "linear-gradient(135deg, #5c22d4, #7c3aed)",
-                  color: "#fff", border: "2px solid #fcd34d",
-                  borderRadius: 12, padding: "7px 18px",
-                  fontFamily: "'DM Sans', system-ui, sans-serif",
-                  fontWeight: 700, fontSize: 14, cursor: "pointer",
-                  boxShadow: "0 4px 20px rgba(92,34,212,0.35)",
-                  transition: "all 160ms ease",
-                  transform: isHov ? "translateY(-2px) scale(1.03)" : "none",
-                }}
-                onClick={() => navigateTo(item.path)}
-                onMouseEnter={() => setNavHovered(item.key)}
-                onMouseLeave={() => setNavHovered(null)}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                <span className="nav-cta-text">{item.label}</span>
-              </button>
-            );
-            // Profile nav item: show mini avatar + name/username
-            if (item.isProfile) {
-              const pName = currentUser?.name || "";
-              const pInitials = pName.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase() || "?";
-              const pPalette = ["#5c22d4","#0ea5e9","#059669","#d97706","#db2777"];
-              const pColor = pPalette[pName.charCodeAt(0) % pPalette.length];
-              const pLabel = currentUser?.username ? `@${currentUser.username}` : (pName.split(" ")[0] || "Profile");
+          {/* Desktop nav links */}
+          <div style={s.navLinks} className="nav-links-desktop">
+            {navItems.map(item => {
+              const isActive = item.matchPages ? item.matchPages.includes(route.page) : route.page === item.key;
+              const isHov = navHovered === item.key;
+              if (item.cta) return (
+                <button key={item.key}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 7,
+                    background: isHov
+                      ? "linear-gradient(135deg, #4318a0, #5c22d4)"
+                      : "linear-gradient(135deg, #5c22d4, #7c3aed)",
+                    color: "#fff", border: "2px solid #fcd34d",
+                    borderRadius: 12, padding: "7px 18px",
+                    fontFamily: "'DM Sans', system-ui, sans-serif",
+                    fontWeight: 700, fontSize: 14, cursor: "pointer",
+                    boxShadow: "0 4px 20px rgba(92,34,212,0.35)",
+                    transition: "all 160ms ease",
+                    transform: isHov ? "translateY(-2px) scale(1.03)" : "none",
+                  }}
+                  onClick={() => navigateTo(item.path)}
+                  onMouseEnter={() => setNavHovered(item.key)}
+                  onMouseLeave={() => setNavHovered(null)}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  {item.label}
+                </button>
+              );
+              if (item.isProfile) {
+                const pName = currentUser?.name || "";
+                const pInitials = pName.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase() || "?";
+                const pPalette = ["#5c22d4","#0ea5e9","#059669","#d97706","#db2777"];
+                const pColor = pPalette[pName.charCodeAt(0) % pPalette.length];
+                const pLabel = currentUser?.username ? `@${currentUser.username}` : (pName.split(" ")[0] || "Profile");
+                return (
+                  <button key={item.key}
+                    style={{
+                      ...s.navBtn(isActive),
+                      background: isActive ? "linear-gradient(135deg, #f3ecfe, #ece0fd)" : isHov ? "#f9f9fb" : "transparent",
+                      boxShadow: isActive ? "0 2px 10px rgba(92,34,212,0.10)" : "none",
+                      transform: isHov && !isActive ? "translateY(-1px)" : "none",
+                      transition: "all 160ms ease",
+                      display: "flex", alignItems: "center", gap: 7,
+                    }}
+                    onClick={() => navigateTo(item.path)}
+                    onMouseEnter={() => setNavHovered(item.key)}
+                    onMouseLeave={() => setNavHovered(null)}>
+                    {currentUser?.photoURL
+                      ? <img src={currentUser.photoURL} alt="" style={{ width: 20, height: 20, borderRadius: "50%", objectFit: "cover", border: "1.5px solid #e0d0fd", flexShrink: 0 }} />
+                      : <div style={{ width: 20, height: 20, borderRadius: "50%", background: `linear-gradient(135deg,${pColor},#7c3aed)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800, color: "#fff", flexShrink: 0 }}>{pInitials}</div>
+                    }
+                    <span>{pLabel}</span>
+                  </button>
+                );
+              }
               return (
                 <button key={item.key}
                   style={{
@@ -679,53 +711,76 @@ export default function App() {
                     boxShadow: isActive ? "0 2px 10px rgba(92,34,212,0.10)" : "none",
                     transform: isHov && !isActive ? "translateY(-1px)" : "none",
                     transition: "all 160ms ease",
-                    display: "flex", alignItems: "center", gap: 7,
                   }}
                   onClick={() => navigateTo(item.path)}
                   onMouseEnter={() => setNavHovered(item.key)}
                   onMouseLeave={() => setNavHovered(null)}>
-                  {currentUser?.photoURL
-                    ? <img src={currentUser.photoURL} alt="" style={{ width: 20, height: 20, borderRadius: "50%", objectFit: "cover", border: "1.5px solid #e0d0fd", flexShrink: 0 }} />
-                    : <div style={{ width: 20, height: 20, borderRadius: "50%", background: `linear-gradient(135deg,${pColor},#7c3aed)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800, color: "#fff", flexShrink: 0 }}>{pInitials}</div>
-                  }
-                  <span className="nav-profile-label">{pLabel}</span>
+                  {item.icon} <span>{item.label}</span>
                 </button>
               );
-            }
-            return (
-              <button key={item.key}
-                style={{
-                  ...s.navBtn(isActive),
-                  background: isActive ? "linear-gradient(135deg, #f3ecfe, #ece0fd)" : isHov ? "#f9f9fb" : "transparent",
-                  boxShadow: isActive ? "0 2px 10px rgba(92,34,212,0.10)" : "none",
-                  transform: isHov && !isActive ? "translateY(-1px)" : "none",
-                  transition: "all 160ms ease",
-                }}
-                onClick={() => navigateTo(item.path)}
-                onMouseEnter={() => setNavHovered(item.key)}
-                onMouseLeave={() => setNavHovered(null)}>
-                {item.icon} <span className="nav-label-text">{item.label}</span>
-              </button>
-            );
-          })}
-          {/* Notification Bell */}
+            })}
+
+            {/* Notification Bell */}
+            <button
+              className="nav-bell"
+              style={{
+                position: "relative",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: 38, height: 38, borderRadius: 10, border: "none", cursor: "pointer",
+                background: notifPanelOpen ? "linear-gradient(135deg, #f3ecfe, #ece0fd)" : "transparent",
+                color: notifPanelOpen ? "#5c22d4" : "#9898a8",
+                transition: "all 160ms ease",
+                flexShrink: 0,
+              }}
+              onClick={() => {
+                setNotifPanelOpen(o => !o);
+                if (!notifPanelOpen) fetchNotifications(sessionToken);
+              }}
+              title="Notifications"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              {notifUnread > 0 && (
+                <span style={{
+                  position: "absolute", top: 4, right: 4,
+                  background: "#5c22d4", color: "#fff",
+                  borderRadius: 99, fontSize: 9, fontWeight: 800,
+                  minWidth: 16, height: 16, display: "flex", alignItems: "center", justifyContent: "center",
+                  padding: "0 4px", lineHeight: 1,
+                  fontFamily: "'DM Sans', system-ui, sans-serif",
+                  border: "2px solid #fff",
+                }}>
+                  {notifUnread > 99 ? "99+" : notifUnread}
+                </span>
+              )}
+            </button>
+
+            <button
+              style={{ ...s.navBtn(false), color: "#9898a8", transition: "color 160ms ease", flexShrink: 0 }}
+              onClick={handleLogout}
+              onMouseEnter={e => e.currentTarget.style.color = "#ef4444"}
+              onMouseLeave={e => e.currentTarget.style.color = "#9898a8"}>
+              <IconLogout /> <span>Logout</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile right side: bell + hamburger only */}
+        <div className="nav-mobile-right" style={{ display: "none", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          {/* Notification bell (mobile) */}
           <button
-            className="nav-bell"
             style={{
               position: "relative",
               display: "flex", alignItems: "center", justifyContent: "center",
               width: 38, height: 38, borderRadius: 10, border: "none", cursor: "pointer",
-              background: notifPanelOpen ? "linear-gradient(135deg, #f3ecfe, #ece0fd)" : "transparent",
-              color: notifPanelOpen ? "#5c22d4" : "#9898a8",
-              transition: "all 160ms ease",
-              flexShrink: 0,
+              background: "transparent", color: "#9898a8",
             }}
             onClick={() => {
               setNotifPanelOpen(o => !o);
               if (!notifPanelOpen) fetchNotifications(sessionToken);
             }}
-            onMouseEnter={e => { if (!notifPanelOpen) { e.currentTarget.style.background = "#f9f9fb"; e.currentTarget.style.color = "#5c22d4"; } }}
-            onMouseLeave={e => { if (!notifPanelOpen) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#9898a8"; } }}
             title="Notifications"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -738,24 +793,150 @@ export default function App() {
                 background: "#5c22d4", color: "#fff",
                 borderRadius: 99, fontSize: 9, fontWeight: 800,
                 minWidth: 16, height: 16, display: "flex", alignItems: "center", justifyContent: "center",
-                padding: "0 4px", lineHeight: 1,
-                fontFamily: "'DM Sans', system-ui, sans-serif",
-                border: "2px solid #fff",
+                padding: "0 4px", border: "2px solid #fff",
               }}>
                 {notifUnread > 99 ? "99+" : notifUnread}
               </span>
             )}
           </button>
+
+          {/* Hamburger button */}
           <button
-            className="nav-logout"
-            style={{ ...s.navBtn(false), color: "#9898a8", transition: "color 160ms ease" }}
-            onClick={handleLogout}
-            onMouseEnter={e => e.currentTarget.style.color = "#ef4444"}
-            onMouseLeave={e => e.currentTarget.style.color = "#9898a8"}>
-            <IconLogout /> <span className="nav-logout-label">Logout</span>
+            className="nav-hamburger"
+            onClick={() => setMobileMenuOpen(o => !o)}
+            style={{
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              gap: 5, width: 40, height: 40, borderRadius: 10, border: "1.5px solid #e0d0fd",
+              background: mobileMenuOpen ? "#f3ecfe" : "#fff", cursor: "pointer",
+              padding: 0, flexShrink: 0,
+            }}
+            aria-label="Open menu"
+          >
+            <span style={{ display: "block", width: 18, height: 2, background: "#5c22d4", borderRadius: 2, transition: "transform 200ms ease, opacity 200ms ease", transform: mobileMenuOpen ? "translateY(7px) rotate(45deg)" : "none" }} />
+            <span style={{ display: "block", width: 18, height: 2, background: "#5c22d4", borderRadius: 2, transition: "opacity 200ms ease", opacity: mobileMenuOpen ? 0 : 1 }} />
+            <span style={{ display: "block", width: 18, height: 2, background: "#5c22d4", borderRadius: 2, transition: "transform 200ms ease, opacity 200ms ease", transform: mobileMenuOpen ? "translateY(-7px) rotate(-45deg)" : "none" }} />
           </button>
         </div>
       </nav>
+
+      {/* ── MOBILE MENU DRAWER ── */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 98,
+            background: "rgba(14,0,40,0.4)",
+          }}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+      <div
+        className="nav-mobile-drawer"
+        style={{
+          position: "fixed", top: 60, left: 0, right: 0, zIndex: 99,
+          background: "#fff",
+          borderBottom: "1.5px solid #e0d0fd",
+          boxShadow: "0 16px 48px rgba(14,0,40,0.18)",
+          padding: "16px 20px 24px",
+          transform: mobileMenuOpen ? "translateY(0)" : "translateY(-110%)",
+          transition: "transform 260ms cubic-bezier(0.16,1,0.3,1)",
+          overflowY: "auto",
+          maxHeight: "calc(100dvh - 60px)",
+        }}
+      >
+        {/* Campus selector in drawer */}
+        <div style={{ marginBottom: 16, padding: "12px 16px", background: "linear-gradient(135deg,#f3ecfe,#faf7ff)", borderRadius: 14, border: "1.5px solid #e0d0fd" }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: "#9898a8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>Campus</p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#5c22d4" }}>
+              <IconPin /> {selectedCampus}
+            </span>
+            <button
+              onClick={() => { setMobileMenuOpen(false); setCampusDropdownOpen(true); }}
+              style={{ fontSize: 12, fontWeight: 600, color: "#5c22d4", background: "#fff", border: "1.5px solid #e0d0fd", borderRadius: 8, padding: "5px 12px", cursor: "pointer" }}
+            >
+              Change
+            </button>
+          </div>
+        </div>
+
+        {/* SELL CTA */}
+        <button
+          style={{
+            width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            background: "linear-gradient(135deg, #5c22d4, #7c3aed)",
+            color: "#fff", border: "2px solid #fcd34d",
+            borderRadius: 14, padding: "14px 20px",
+            fontFamily: "'DM Sans', system-ui, sans-serif",
+            fontWeight: 700, fontSize: 15, cursor: "pointer",
+            boxShadow: "0 4px 20px rgba(92,34,212,0.35)",
+            marginBottom: 12,
+          }}
+          onClick={() => { navigateTo("/sell"); setMobileMenuOpen(false); }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          SELL
+        </button>
+
+        {/* Nav items */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {navItems.filter(i => !i.cta).map(item => {
+            const isActive = item.matchPages ? item.matchPages.includes(route.page) : route.page === item.key;
+            const pName = currentUser?.name || "";
+            const pInitials = pName.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase() || "?";
+            const pPalette = ["#5c22d4","#0ea5e9","#059669","#d97706","#db2777"];
+            const pColor = pPalette[pName.charCodeAt(0) % pPalette.length];
+            return (
+              <button
+                key={item.key}
+                style={{
+                  display: "flex", alignItems: "center", gap: 12,
+                  padding: "13px 16px", borderRadius: 12,
+                  border: "none",
+                  background: isActive ? "linear-gradient(135deg, #f3ecfe, #ece0fd)" : "transparent",
+                  color: isActive ? "#5c22d4" : "#3c3c4e",
+                  fontFamily: "'DM Sans', system-ui, sans-serif",
+                  fontWeight: isActive ? 700 : 500,
+                  fontSize: 15, cursor: "pointer",
+                  textAlign: "left",
+                  boxShadow: isActive ? "inset 0 0 0 1.5px #e0d0fd" : "none",
+                }}
+                onClick={() => { navigateTo(item.path); setMobileMenuOpen(false); }}
+              >
+                {item.isProfile
+                  ? (currentUser?.photoURL
+                    ? <img src={currentUser.photoURL} alt="" style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover", border: "1.5px solid #e0d0fd", flexShrink: 0 }} />
+                    : <div style={{ width: 24, height: 24, borderRadius: "50%", background: `linear-gradient(135deg,${pColor},#7c3aed)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: "#fff", flexShrink: 0 }}>{pInitials}</div>
+                  )
+                  : <span style={{ flexShrink: 0, display: "flex" }}>{item.icon}</span>
+                }
+                <span>
+                  {item.isProfile
+                    ? (currentUser?.name || "Profile")
+                    : item.label}
+                  {item.key === "chats" && unreadCount > 0 && (
+                    <span style={{ marginLeft: 8, background: "#5c22d4", color: "#fff", fontSize: 11, fontWeight: 800, borderRadius: 99, padding: "2px 7px" }}>{unreadCount}</span>
+                  )}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Bottom actions */}
+        <div style={{ borderTop: "1px solid #f2f2f6", marginTop: 16, paddingTop: 16, display: "flex", flexDirection: "column", gap: 4 }}>
+          <button
+            style={{
+              display: "flex", alignItems: "center", gap: 12,
+              padding: "13px 16px", borderRadius: 12, border: "none",
+              background: "transparent", color: "#ef4444",
+              fontFamily: "'DM Sans', system-ui, sans-serif", fontWeight: 600, fontSize: 15, cursor: "pointer",
+            }}
+            onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+          >
+            <IconLogout /> Logout
+          </button>
+        </div>
+      </div>
 
       {notifPanelOpen && (
         <div
@@ -1083,85 +1264,143 @@ export default function App() {
         /* ══════════════════════════════════════════════════════════════════
            Responsive: Tablet (≤900px)
            ══════════════════════════════════════════════════════════════════ */
-        @media (max-width: 900px) {
-          /* Item detail: stack columns */
-          .item-detail-grid {
-            grid-template-columns: 1fr !important;
-          }
-          /* Public profile: stack sidebar */
-          .pub-profile-grid {
-            grid-template-columns: 1fr !important;
-          }
-          /* Browse grid */
-          .browse-grid {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
-          }
-          /* Home: category + feature grids */
-          .home-category-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          .home-feature-grid {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
-          }
-          /* Listing grids */
+        @media (min-width: 641px) {
+          .home-category-grid > div { aspect-ratio: 1.4 / 1; }
+        }
+          .item-detail-grid { grid-template-columns: 1fr !important; }
+          .pub-profile-grid { grid-template-columns: 1fr !important; }
+          .browse-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; }
+          .home-category-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .home-feature-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; }
           .profile-listing-grid,
           .wishlist-grid,
-          .pubprofile-listing-grid {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
-          }
-          /* Sell form 2-col fields */
+          .pubprofile-listing-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; }
           .sell-fields-grid,
           .profile-basic-grid,
-          .profile-account-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
+          .profile-account-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           Responsive: Mobile hamburger breakpoint (≤768px)
+           Switch to hamburger nav — hide desktop links, show mobile right
+           ══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+          .nav-desktop-right { display: none !important; }
+          .nav-mobile-right  { display: flex !important; }
+        }
+        @media (min-width: 769px) {
+          .nav-mobile-drawer { display: none !important; }
+          .nav-mobile-right  { display: none !important; }
         }
 
         /* ══════════════════════════════════════════════════════════════════
            Responsive: Mobile (≤640px)
            ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 640px) {
-          html, body { overflow-x: hidden; }
+          /* ── Hard overflow guard ─────────────────────────────────────── */
+          html, body, #root {
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+          }
+          * { max-width: 100%; box-sizing: border-box; }
 
           /* ── Navbar ─────────────────────────────────────────────────── */
-          nav { padding: 0 12px !important; gap: 6px !important; }
-          .nav-left { gap: 8px !important; flex: 1 1 auto; min-width: 0; }
-          .nav-logo { font-size: 16px !important; white-space: nowrap; }
-          .nav-campus-selector { flex-shrink: 0; }
-          .nav-campus-trigger span,
-          .nav-campus-trigger-label { max-width: 80px !important; }
-          .nav-campus-menu { left: auto !important; right: 0 !important; width: 88vw !important; max-width: 320px !important; min-width: 0 !important; }
-          .nav-campus-label { display: none !important; }
-          .nav-links-wrap {
-            gap: 2px !important;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            flex-shrink: 0;
-            max-width: 56vw;
+          nav {
+            padding: 0 16px !important;
+            height: 56px !important;
           }
-          .nav-links-wrap::-webkit-scrollbar { display: none; }
-          .nav-label-text { display: none !important; }
-          .nav-profile-label { display: none !important; }
-          .nav-cta-text { display: none !important; }
-          .nav-cta-label { padding: 7px 10px !important; gap: 0 !important; min-width: 36px !important; justify-content: center !important; }
-          .nav-logout-label { display: none !important; }
-          .nav-logout { padding: 7px !important; min-width: 36px; justify-content: center; }
-          .nav-bell { width: 34px !important; height: 34px !important; }
+          .nav-logo { font-size: 17px !important; }
+          /* Campus dropdown: right-align and clamp width */
+          .nav-campus-menu {
+            right: 0 !important;
+            left: auto !important;
+            width: calc(100vw - 32px) !important;
+            min-width: 0 !important;
+            max-width: 340px !important;
+          }
+          /* Mobile drawer: lock to full width */
+          .nav-mobile-drawer {
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+          }
 
-          /* ── Chats: full-width single-pane on mobile ───────────────── */
-          .chat-layout {
+          /* ── Home hero ───────────────────────────────────────────────── */
+          .home-hero { padding: 48px 20px 60px !important; }
+          .home-hero-title { font-size: 30px !important; line-height: 1.2 !important; }
+          /* Stack hero CTA buttons vertically */
+          .home-hero-btns {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+          }
+          .home-hero-btns button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          /* Stats: 2×2 grid instead of a compressed row */
+          .home-hero-stats {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 16px 24px !important;
+            margin-top: 36px !important;
+            justify-items: center !important;
+          }
+
+          /* ── Home sections ───────────────────────────────────────────── */
+          .home-section { padding: 40px 20px 0 !important; }
+          .home-section-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            margin-bottom: 20px !important;
+          }
+          .home-section-header button { width: 100% !important; text-align: center !important; justify-content: center !important; }
+
+          /* ── Category grid: 2-col on 640px ──────────────────────────── */
+          .home-category-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          /* Kill the aspect ratio that forces cards too wide on tiny screens */
+          .home-category-grid > div {
+            aspect-ratio: auto !important;
+            min-height: 130px !important;
+            padding: 20px 16px !important;
+          }
+
+          /* ── Listing grid ────────────────────────────────────────────── */
+          .home-listing-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .home-feature-grid {
             grid-template-columns: 1fr !important;
-            height: calc(100vh - 56px) !important;
+            gap: 12px !important;
           }
-          .chat-layout[data-mobile-view="list"] section { display: none !important; }
-          .chat-layout[data-mobile-view="chat"] aside { display: none !important; }
-          .chat-back-btn { display: inline-flex !important; }
-          .chat-bubble-wrap { max-width: 82% !important; }
-          .chat-messages-pane { padding: 14px !important; }
-          .chat-composer-pane { padding: 8px 12px 12px !important; }
 
-          /* ── Item detail layout ─────────────────────────────────────── */
+          /* ── CTA + credits boxes ─────────────────────────────────────── */
+          .home-cta-box, .home-credits-box {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 28px 20px !important;
+            gap: 20px !important;
+          }
+          .home-cta-box button { width: 100% !important; justify-content: center !important; }
+
+          /* ── Browse ──────────────────────────────────────────────────── */
+          .browse-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+            padding: 12px 16px !important;
+          }
+          .browse-header { padding: 24px 16px 32px !important; }
+          .browse-filter-row { flex-direction: column !important; align-items: stretch !important; }
+          .browse-filter-row > * { min-width: 0 !important; width: 100% !important; }
+          .browse-catbar-row { padding: 10px 16px !important; }
+          .browse-result-row, .browse-status-row { padding-left: 16px !important; padding-right: 16px !important; }
+
+          /* ── Item detail ─────────────────────────────────────────────── */
           .item-detail-grid {
             grid-template-columns: 1fr !important;
             padding: 0 16px !important;
@@ -1170,106 +1409,79 @@ export default function App() {
           .item-back-row { padding: 16px 16px 0 !important; }
           .item-info-card { padding: 18px !important; }
           .item-overview-grid { grid-template-columns: 1fr !important; }
-          .item-seller-stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-          .item-right-sidebar { position: static !important; top: auto !important; }
+          .item-seller-stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .item-right-sidebar { position: static !important; }
 
-          /* ── Public profile ─────────────────────────────────────────── */
+          /* ── Public profile ──────────────────────────────────────────── */
           .pubprofile-hero { padding: 24px 16px 80px !important; }
           .pubprofile-content { padding: 0 16px !important; margin-top: -52px !important; }
-          .pub-profile-grid {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
-          }
+          .pub-profile-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
           .pubprofile-listing-grid {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-            gap: 12px !important;
-          }
-
-          /* ── Browse ──────────────────────────────────────────────────── */
-          .browse-grid {
-            padding: 12px 16px !important;
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px !important;
           }
-          .browse-header { padding: 24px 16px 32px !important; }
-          .browse-filter-row { flex-direction: column !important; align-items: stretch !important; }
-          .browse-filter-row > * { min-width: 0 !important; width: 100% !important; }
-          .browse-catbar-row { padding: 10px 16px !important; }
-          .browse-result-row, .browse-status-row { padding-left: 16px !important; padding-right: 16px !important; }
-
-          /* ── Home ────────────────────────────────────────────────────── */
-          .home-hero { padding: 40px 16px 56px !important; }
-          .home-hero-title { font-size: 32px !important; }
-          .home-hero-stats { gap: 20px !important; }
-          .home-section { padding: 40px 16px 0 !important; }
-          .home-category-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 12px !important;
-          }
-          .home-feature-grid {
-            grid-template-columns: 1fr !important;
-            gap: 14px !important;
-          }
-          .home-section-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-          .home-cta-box, .home-credits-box {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            padding: 28px 20px !important;
-            text-align: left !important;
-          }
-          .home-listing-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 12px !important;
-          }
+          .pub-stat-row { flex-wrap: wrap !important; }
+          .pub-profile-actions button { width: 100% !important; justify-content: center !important; }
 
           /* ── Profile ─────────────────────────────────────────────────── */
           .profile-hero { padding: 24px 16px 64px !important; }
           .profile-content { padding: 0 16px !important; margin-top: -36px !important; }
-          .profile-header-card { padding: 20px 16px !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
-          .profile-header-info { width: 100% !important; }
+          .profile-header-card { padding: 20px 16px !important; flex-direction: column !important; align-items: flex-start !important; }
           .profile-header-card > div { flex-wrap: wrap !important; }
           .profile-view-profile-btn { width: 100% !important; justify-content: center !important; }
           .profile-tabs { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
           .profile-tabs::-webkit-scrollbar { display: none; }
-          .profile-tabs button { white-space: nowrap; flex-shrink: 0; }
-          .profile-basic-grid,
-          .profile-account-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .profile-listing-grid,
-          .wishlist-grid {
+          .profile-tabs button { white-space: nowrap !important; flex-shrink: 0 !important; }
+          .profile-basic-grid, .profile-account-grid { grid-template-columns: 1fr !important; }
+          .profile-listing-grid, .wishlist-grid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px !important;
           }
           .section-card-pad { padding: 16px !important; }
-          .section-card-header { padding: 14px 16px 12px !important; flex-wrap: wrap; gap: 8px; }
+          .section-card-header { padding: 14px 16px 12px !important; flex-wrap: wrap !important; gap: 8px !important; }
 
-          /* ── Sell form ───────────────────────────────────────────────── */
+          /* ── Chats ───────────────────────────────────────────────────── */
+          .chat-layout {
+            grid-template-columns: 1fr !important;
+            height: calc(100dvh - 56px) !important;
+          }
+          .chat-bubble-wrap { max-width: 82% !important; }
+          .chat-messages-pane { padding: 14px !important; }
+          .chat-composer-pane { padding: 8px 12px 12px !important; }
+
+          /* ── Dashboard ───────────────────────────────────────────────── */
+          .db-stat-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+          .db-grid-main { grid-template-columns: 1fr !important; }
+          .db-right-col { position: static !important; max-height: none !important; overflow-y: visible !important; }
+          .db-hero { padding: 24px 16px 40px !important; }
+          .db-content { padding: 0 12px !important; margin-top: -20px !important; }
+          .db-hero-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .db-listing-row { grid-template-columns: 1fr !important; }
+          .db-listings-table-head { display: none !important; }
+          .db-listing-row-meta { display: flex !important; flex-wrap: wrap !important; gap: 12px !important; padding-top: 8px !important; border-top: 1px solid #f2f2f6 !important; }
+
+          /* ── Sell ────────────────────────────────────────────────────── */
           .sell-hero { padding: 24px 16px 32px !important; }
           .sell-content { padding: 0 16px !important; }
           .sell-form-card { padding: 20px !important; }
-          .sell-category-grid {
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-            gap: 8px !important;
-          }
-          .sell-fields-grid,
-          .sell-pricing-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .sell-photo-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
+          .sell-category-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+          .sell-fields-grid, .sell-pricing-grid { grid-template-columns: 1fr !important; }
+          .sell-photo-grid { grid-template-columns: repeat(3, 1fr) !important; }
 
-          /* ── Wishlist / generic page headers ─────────────────────────── */
+          /* ── Wishlist / page headers ─────────────────────────────────── */
           .page-header-band { padding: 24px 16px 32px !important; }
           .page-inner-pad { padding: 16px !important; }
 
-          /* ── Modals: keep inside viewport ────────────────────────────── */
+          /* ── Modals ──────────────────────────────────────────────────── */
+          .modal-overlay {
+            padding: 0 !important;
+            align-items: flex-end !important;
+          }
           .modal-card {
-            max-height: 88vh !important;
+            border-radius: 20px 20px 0 0 !important;
+            max-height: 92vh !important;
             overflow-y: auto !important;
             padding: 24px 18px !important;
-            border-radius: 16px !important;
           }
 
           /* ── Toast ───────────────────────────────────────────────────── */
@@ -1280,117 +1492,64 @@ export default function App() {
             justify-content: center !important;
           }
 
-          /* ── Auth screens (Login/Signup/etc) ─────────────────────────── */
+          /* ── Auth screens ────────────────────────────────────────────── */
           .auth-wrapper { padding: 24px 12px !important; }
           .auth-card { padding: 28px 20px !important; border-radius: 18px !important; }
         }
 
         /* ══════════════════════════════════════════════════════════════════
-           Responsive: Small mobile (≤480px)
+           Responsive: Small (≤480px)
            ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 480px) {
+          /* Category: still 2-col but smaller aspect ratio */
+          .home-category-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+          }
+          .home-category-grid > div { min-height: 120px !important; }
+          /* Listing grids: 2 col */
           .browse-grid,
           .home-listing-grid,
           .profile-listing-grid,
           .wishlist-grid,
           .pubprofile-listing-grid {
-            grid-template-columns: 1fr 1fr !important;
+            grid-template-columns: repeat(2, 1fr) !important;
             gap: 10px !important;
           }
-          .home-category-grid { grid-template-columns: 1fr 1fr !important; }
-          .home-stat-grid { grid-template-columns: 1fr 1fr !important; }
-          .item-seller-stats-grid { grid-template-columns: 1fr 1fr !important; }
-          .sell-photo-grid { grid-template-columns: repeat(3, 1fr) !important; }
-          .sell-category-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          /* Hero title */
           .home-hero-title { font-size: 26px !important; }
-          .home-hero-stats { gap: 14px !important; flex-wrap: wrap; justify-content: center; }
+          /* Hero stats: keep 2-col but tighter gap */
+          .home-hero-stats { gap: 12px 16px !important; }
+          /* Dashboard */
+          .db-stat-grid { grid-template-columns: 1fr 1fr !important; }
+          .db-charts-grid { grid-template-columns: 1fr !important; }
+          .db-insights-grid { grid-template-columns: 1fr !important; }
+          /* Auth */
           .auth-card { padding: 24px 16px !important; }
+          /* Sell category */
+          .sell-category-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         /* ══════════════════════════════════════════════════════════════════
            Responsive: Extra small (≤360px)
            ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 360px) {
-          .nav-links-wrap { max-width: 50vw; }
-          .nav-campus-trigger span,
-          .nav-campus-trigger-label { max-width: 50px !important; }
+          .nav-logo { font-size: 15px !important; }
+          /* Category: single column on the smallest phones */
+          .home-category-grid { grid-template-columns: 1fr !important; }
+          .home-category-grid > div { min-height: 100px !important; aspect-ratio: auto !important; }
+          /* Listing grids: single column */
           .browse-grid,
           .home-listing-grid,
           .profile-listing-grid,
           .wishlist-grid,
-          .pubprofile-listing-grid,
-          .home-category-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .sell-photo-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-
-        /* ══════════════════════════════════════════════════════════════════
-           Additional mobile polish
-           ══════════════════════════════════════════════════════════════════ */
-
-        /* Notification slide-panel: cap to full viewport on mobile */
-        @media (max-width: 640px) {
-          /* Notification panel is already min(420px,100vw) in JS — just ensure
-             the overlay backdrop works correctly on iOS */
-          body.notif-open { overflow: hidden; }
-
-          /* Dashboard: collapse the 2-col stat grid + main grid */
-          .db-stat-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-          .db-grid-main { grid-template-columns: 1fr !important; }
-          .db-right-col { position: static !important; max-height: none !important; overflow-y: visible !important; }
-          .db-hero { padding: 24px 16px 40px !important; }
-          .db-content { padding: 0 12px !important; margin-top: -20px !important; }
-          .db-hero-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-
-          /* PublicProfile: stat pill row should wrap on tiny screens */
-          .pub-stat-row { flex-wrap: wrap !important; }
-          /* PublicProfile action buttons full width */
-          .pub-profile-actions button { width: 100% !important; justify-content: center !important; }
-
-          /* Profile header: avatar + info row stacks nicely */
-          .profile-header-card > div { flex-wrap: wrap !important; }
-
-          /* Category cards: maintain minimum touch target */
-          .home-category-grid > div { min-height: 110px !important; }
-
-          /* Browse filter: college dropdown fills width */
-          .browse-filter-row .nav-campus-selector,
-          .browse-filter-row > div { width: 100% !important; min-width: 0 !important; }
-
-          /* Sell: category picker tiles readable on small screens */
-          .sell-category-grid > button { padding: 14px 10px !important; }
-
-          /* Chat smart-prompt chips: smaller text on phones */
-          .chat-composer-pane button { font-size: 11px !important; padding: 5px 10px !important; }
-
-          /* Modals: don't let the backdrop padding squish the card */
-          .modal-overlay { padding: 16px !important; align-items: flex-end !important; }
-          .modal-card { border-radius: 20px 20px 0 0 !important; max-height: 92vh !important; }
-
-          /* Prevent product card text truncation issues */
-          .product-card-body { padding: 10px 12px 14px !important; }
-
-          /* Dashboard listing table → card view on mobile */
-          .db-listing-row { grid-template-columns: 1fr !important; }
-          .db-listings-table-head { display: none !important; }
-          .db-metric-cell { display: inline-flex !important; flex-direction: column !important; align-items: center !important; }
-          .db-metric-label { display: block !important; }
-          .db-listing-row-meta { display: flex !important; flex-wrap: wrap !important; gap: 12px !important; padding-top: 8px !important; border-top: 1px solid #f2f2f6 !important; }
-          .db-listing-status { justify-content: flex-start !important; }
-        }
-
-        @media (max-width: 480px) {
-          /* Dashboard stat grid: 2 per row */
-          .db-stat-grid { grid-template-columns: 1fr 1fr !important; }
-          /* Charts in dashboard: full width */
-          .db-charts-grid { grid-template-columns: 1fr !important; }
-          .db-insights-grid { grid-template-columns: 1fr !important; }
-        }
-
-        @media (max-width: 360px) {
-          /* Dashboard: stack to 1 col */
+          .pubprofile-listing-grid { grid-template-columns: 1fr !important; }
+          /* Stats: single column */
+          .home-hero-stats { grid-template-columns: 1fr 1fr !important; }
+          /* Dashboard stats: single column */
           .db-stat-grid { grid-template-columns: 1fr !important; }
+          /* Sell */
+          .sell-photo-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
     </div>
