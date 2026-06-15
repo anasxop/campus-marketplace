@@ -276,7 +276,7 @@ function OverviewSection({ item, config }) {
       <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 16, fontWeight: 700, color: "#14141f", margin: "0 0 18px" }}>
         Overview
       </h2>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div className="item-overview-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         {finalRows.map((r, i) => (
           <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
             <div style={{
@@ -601,10 +601,11 @@ export default function ItemDetailsRoute({
       {/* ── Rating Modal ── */}
       {showRatingModal && (
         <div
-          style={{ position: "fixed", inset: 0, background: "rgba(14,0,40,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)", animation: "fadeUp 150ms ease both" }}
+          style={{ position: "fixed", inset: 0, background: "rgba(14,0,40,0.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)", animation: "fadeUp 150ms ease both", padding: 16, boxSizing: "border-box" }}
           onClick={() => setShowRatingModal(false)}
         >
           <div
+            className="modal-card"
             style={{ background: "#fff", borderRadius: 24, padding: "36px", width: "100%", maxWidth: 420, boxShadow: "0 32px 80px rgba(14,0,40,0.25)", animation: "fadeUp 200ms ease both" }}
             onClick={e => e.stopPropagation()}
           >
@@ -632,7 +633,7 @@ export default function ItemDetailsRoute({
       )}
 
       {/* ── Back button ── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 32px 0", boxSizing: "border-box" }}>
+      <div className="item-back-row" style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 32px 0", boxSizing: "border-box" }}>
         <button
           style={{ display: "inline-flex", alignItems: "center", gap: 7, fontFamily: "'DM Sans', system-ui, sans-serif", fontSize: 14, fontWeight: 500, color: "#9898a8", background: "none", border: "none", cursor: "pointer", padding: "6px 0", transition: "color 160ms ease" }}
           onClick={navigateBack}
@@ -680,7 +681,7 @@ export default function ItemDetailsRoute({
           )}
 
           {/* ── Item info card ── */}
-          <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "28px", boxShadow: "0 4px 20px rgba(14,0,40,0.07)", marginBottom: 20 }}>
+          <div className="item-info-card" style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "28px", boxShadow: "0 4px 20px rgba(14,0,40,0.07)", marginBottom: 20 }}>
 
             {/* Category featured label */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 }}>
@@ -736,7 +737,7 @@ export default function ItemDetailsRoute({
 
           {/* ── Seller reviews ── */}
           {ratingReviews.length > 0 && (
-            <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "24px 28px", boxShadow: "0 4px 20px rgba(14,0,40,0.07)" }}>
+            <div className="item-info-card" style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "24px 28px", boxShadow: "0 4px 20px rgba(14,0,40,0.07)" }}>
               <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 16, fontWeight: 700, color: "#14141f", margin: "0 0 18px" }}>
                 {isService ? "Client Reviews" : "Seller Reviews"} ({ratingStats.count})
               </h2>
@@ -767,10 +768,10 @@ export default function ItemDetailsRoute({
         </div>
 
         {/* ════════ RIGHT SIDEBAR ════════ */}
-        <div style={{ position: "sticky", top: 88, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="item-right-sidebar" style={{ position: "sticky", top: 88, display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* ── Price / action card ── */}
-          <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "24px", boxShadow: "0 8px 32px rgba(14,0,40,0.10)" }}>
+          <div className="item-info-card" style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "24px", boxShadow: "0 8px 32px rgba(14,0,40,0.10)" }}>
 
             {/* Price */}
             {!isService ? (
@@ -821,7 +822,7 @@ export default function ItemDetailsRoute({
           </div>
 
           {/* ── Seller / provider card ── */}
-          <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "22px 24px", boxShadow: "0 4px 16px rgba(14,0,40,0.07)" }}>
+          <div className="item-info-card" style={{ background: "#fff", borderRadius: 20, border: "1px solid #e5e5ec", padding: "22px 24px", boxShadow: "0 4px 16px rgba(14,0,40,0.07)" }}>
             <p style={{ fontSize: 12, color: "#9898a8", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 16px" }}>
               {isService ? "Provider info" : "Seller info"}
             </p>
@@ -842,7 +843,7 @@ export default function ItemDetailsRoute({
               </div>
             </div>
 
-            <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid #f2f2f6", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="item-seller-stats-grid" style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid #f2f2f6", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div style={{ background: config.softBg, borderRadius: 12, padding: "12px", textAlign: "center", border: `1px solid ${config.border}` }}>
                 <p style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, fontSize: 22, color: "#14141f", margin: 0 }}>
                   {sellerListingsCount !== null ? sellerListingsCount : "—"}

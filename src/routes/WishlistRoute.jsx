@@ -36,7 +36,7 @@ export default function WishlistRoute({ discount, openItem, toggleWishlist, wish
   return (
     <div style={{ paddingBottom: 60, background: "#f9f9fb", minHeight: "calc(100vh - 64px)" }}>
       {/* Header */}
-      <div style={{
+      <div className="page-header-band" style={{
         background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)",
         padding: "36px 32px 44px", position: "relative", overflow: "hidden",
       }}>
@@ -51,8 +51,8 @@ export default function WishlistRoute({ discount, openItem, toggleWishlist, wish
         </div>
       </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "28px 32px", boxSizing: "border-box" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
+      <div className="page-inner-pad" style={{ maxWidth: 1200, margin: "0 auto", padding: "28px 32px", boxSizing: "border-box" }}>
+        <div className="wishlist-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
           {wishlistItems.map((item, idx) => (
             <ProductCard
               key={item.id} item={item} discount={discount}

@@ -247,6 +247,24 @@ const DASHBOARD_CSS = `
     .db-content { padding: 0 12px; margin-top: -20px; }
     .db-stat-grid { grid-template-columns: 1fr 1fr; }
   }
+  @media (max-width: 640px) {
+    .db-listings-table-head { display: none; }
+    .db-listing-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 14px;
+    }
+    .db-listing-status { justify-content: flex-start; }
+    .db-listing-row-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-top: 8px;
+      border-top: 1px solid #f2f2f6;
+    }
+    .db-metric-cell { text-align: left; }
+    .db-metric-label { display: block; }
+  }
 `;
 
 // ── Mini Bar Chart ─────────────────────────────────────────────────────────────
@@ -530,9 +548,10 @@ function ChartBlock({ title, icon, data, color }) {
 }
 
 // ── Top Listings Table ─────────────────────────────────────────────────────────
-function MetricCell({ value, accent = t.purple600 }) {
+function MetricCell({ value, accent = t.purple600, label }) {
   return (
-    <div style={{ textAlign: "center" }}>
+    <div className="db-metric-cell" style={{ textAlign: "center" }}>
+      {label && <span className="db-metric-label" style={{ display: "none", fontSize: 10, fontWeight: 700, color: t.gray400, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 2 }}>{label}</span>}
       <span style={{ fontSize: 14, fontWeight: 700, fontFamily: "'Syne', system-ui, sans-serif", color: value > 0 ? accent : t.gray300 }}>
         {value}
       </span>
@@ -738,7 +757,7 @@ export default function DashboardRoute({ user, sessionToken, onStatusChange, ope
               <div>
                 <SectionTitle icon="🏆">Top Listings</SectionTitle>
                 <div style={{ background: t.white, borderRadius: 16, border: `1px solid ${t.gray200}`, boxShadow: shadow.sm, overflow: "hidden" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 110px 64px 64px 64px 64px", padding: "10px 16px", borderBottom: `1px solid ${t.gray100}`, fontSize: 11, fontWeight: 700, color: t.gray400, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  <div className="db-listings-table-head" style={{ display: "grid", gridTemplateColumns: "1fr 110px 64px 64px 64px 64px", padding: "10px 16px", borderBottom: `1px solid ${t.gray100}`, fontSize: 11, fontWeight: 700, color: t.gray400, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                     <span>Listing</span>
                     <span style={{ textAlign: "center" }}>Status</span>
                     <span style={{ textAlign: "center" }}>Views</span>
@@ -750,7 +769,7 @@ export default function DashboardRoute({ user, sessionToken, onStatusChange, ope
                     const liveStatus = normalizeStatus(localStatusOverrides[l.id] || l.status);
                     const cfg = STATUS_CONFIG[liveStatus];
                     return (
-                    <div key={l.id} style={{ display: "grid", gridTemplateColumns: "1fr 110px 64px 64px 64px 64px", padding: "14px 16px", alignItems: "center", borderBottom: i < topListings.length - 1 ? `1px solid ${t.gray100}` : "none", transition: "background 140ms ease" }}
+                    <div key={l.id} className="db-listing-row" style={{ display: "grid", gridTemplateColumns: "1fr 110px 64px 64px 64px 64px", padding: "14px 16px", alignItems: "center", borderBottom: i < topListings.length - 1 ? `1px solid ${t.gray100}` : "none", transition: "background 140ms ease" }}
                       onMouseEnter={e => e.currentTarget.style.background = t.gray50}
                       onMouseLeave={e => e.currentTarget.style.background = ""}
                     >
@@ -766,7 +785,7 @@ export default function DashboardRoute({ user, sessionToken, onStatusChange, ope
                           <div style={{ fontSize: 11, color: t.purple600, fontWeight: 700, marginTop: 2 }}>₹{l.price.toLocaleString("en-IN")}</div>
                         </div>
                       </div>
-                      <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+                      <div className="db-listing-status" style={{ position: "relative", display: "flex", justifyContent: "center" }}>
                         <button
                           disabled={statusUpdating === l.id}
                           style={{
@@ -799,10 +818,12 @@ export default function DashboardRoute({ user, sessionToken, onStatusChange, ope
                           </div>
                         )}
                       </div>
-                      <MetricCell value={l.views} />
-                      <MetricCell value={l.uniqueViews} />
-                      <MetricCell value={l.saves}    accent="#db2777" />
-                      <MetricCell value={l.messages} accent={t.blue500} />
+                      <div className="db-listing-row-meta">
+                        <MetricCell value={l.views} label="Views" />
+                        <MetricCell value={l.uniqueViews} label="Unique" />
+                        <MetricCell value={l.saves}    accent="#db2777" label="Saves" />
+                        <MetricCell value={l.messages} accent={t.blue500} label="Msgs" />
+                      </div>
                     </div>
                     );
                   })}

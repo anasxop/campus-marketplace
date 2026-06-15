@@ -546,13 +546,14 @@ export default function App() {
         boxShadow: "0 2px 24px rgba(92,34,212,0.08)",
         position: "sticky", top: 0, zIndex: 100,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span style={{ ...s.logo, cursor: "pointer" }} onClick={() => { navigateTo("/home"); window.scrollTo({ top: 0, behavior: "instant" }); }}>
+        <div className="nav-left" style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <span className="nav-logo" style={{ ...s.logo, cursor: "pointer" }} onClick={() => { navigateTo("/home"); window.scrollTo({ top: 0, behavior: "instant" }); }}>
             Campus<span style={{ color: "#fcd34d" }}>Marketplace</span>
           </span>
 
-          <div style={{ position: "relative" }}>
+          <div className="nav-campus-selector" style={{ position: "relative" }}>
             <div
+              className="nav-campus-trigger"
               style={{
                 display: "flex", alignItems: "center", gap: 5,
                 background: "linear-gradient(135deg, #f3ecfe, #faf7ff)",
@@ -576,7 +577,7 @@ export default function App() {
             </div>
 
             {campusDropdownOpen && (
-              <div style={{
+              <div className="nav-campus-menu" style={{
                 position: "absolute", top: "calc(100% + 8px)", left: 0,
                 background: "#fff", borderRadius: 14,
                 border: "1.5px solid #e0d0fd",
@@ -709,6 +710,7 @@ export default function App() {
           })}
           {/* Notification Bell */}
           <button
+            className="nav-bell"
             style={{
               position: "relative",
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -745,11 +747,12 @@ export default function App() {
             )}
           </button>
           <button
+            className="nav-logout"
             style={{ ...s.navBtn(false), color: "#9898a8", transition: "color 160ms ease" }}
             onClick={handleLogout}
             onMouseEnter={e => e.currentTarget.style.color = "#ef4444"}
             onMouseLeave={e => e.currentTarget.style.color = "#9898a8"}>
-            <IconLogout /> Logout
+            <IconLogout /> <span className="nav-logout-label">Logout</span>
           </button>
         </div>
       </nav>
@@ -1077,7 +1080,9 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background: #d0d0db; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #9898a8; }
 
-        /* ── Responsive: Tablet (≤900px) ── */
+        /* ══════════════════════════════════════════════════════════════════
+           Responsive: Tablet (≤900px)
+           ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 900px) {
           /* Item detail: stack columns */
           .item-detail-grid {
@@ -1089,53 +1094,232 @@ export default function App() {
           }
           /* Browse grid */
           .browse-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+          }
+          /* Home: category + feature grids */
+          .home-category-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .home-feature-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+          }
+          /* Listing grids */
+          .profile-listing-grid,
+          .wishlist-grid,
+          .pubprofile-listing-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+          }
+          /* Sell form 2-col fields */
+          .sell-fields-grid,
+          .profile-basic-grid,
+          .profile-account-grid {
+            grid-template-columns: 1fr 1fr !important;
           }
         }
 
-        /* ── Responsive: Mobile (≤640px) ── */
+        /* ══════════════════════════════════════════════════════════════════
+           Responsive: Mobile (≤640px)
+           ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 640px) {
-          /* Navbar: compress on mobile */
+          html, body { overflow-x: hidden; }
+
+          /* ── Navbar ─────────────────────────────────────────────────── */
+          nav { padding: 0 12px !important; gap: 6px !important; }
+          .nav-left { gap: 8px !important; flex: 1 1 auto; min-width: 0; }
+          .nav-logo { font-size: 16px !important; white-space: nowrap; }
+          .nav-campus-selector { flex-shrink: 0; }
+          .nav-campus-trigger span { max-width: 80px !important; }
+          .nav-campus-menu { left: auto !important; right: 0 !important; width: 88vw !important; max-width: 320px !important; min-width: 0 !important; }
           .nav-campus-label { display: none !important; }
-          .nav-links-wrap { gap: 2px !important; overflow-x: auto; }
+          .nav-links-wrap {
+            gap: 2px !important;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex-shrink: 0;
+            max-width: 56vw;
+          }
+          .nav-links-wrap::-webkit-scrollbar { display: none; }
           .nav-label-text { display: none !important; }
           .nav-profile-label { display: none !important; }
           .nav-cta-text { display: none !important; }
           .nav-cta-label { padding: 7px 10px !important; gap: 0 !important; min-width: 36px !important; justify-content: center !important; }
+          .nav-logout-label { display: none !important; }
+          .nav-logout { padding: 7px !important; min-width: 36px; justify-content: center; }
+          .nav-bell { width: 34px !important; height: 34px !important; }
 
-          /* Chats: full-width panel on mobile */
-          .chat-layout { grid-template-columns: 1fr !important; }
+          /* ── Chats: full-width single-pane on mobile ───────────────── */
+          .chat-layout {
+            grid-template-columns: 1fr !important;
+            height: calc(100vh - 56px) !important;
+          }
+          .chat-layout[data-mobile-view="list"] section { display: none !important; }
+          .chat-layout[data-mobile-view="chat"] aside { display: none !important; }
+          .chat-back-btn { display: inline-flex !important; }
+          .chat-bubble-wrap { max-width: 82% !important; }
+          .chat-messages-pane { padding: 14px !important; }
+          .chat-composer-pane { padding: 8px 12px 12px !important; }
 
-          /* Item detail layout */
+          /* ── Item detail layout ─────────────────────────────────────── */
           .item-detail-grid {
             grid-template-columns: 1fr !important;
             padding: 0 16px !important;
+            gap: 16px !important;
           }
+          .item-back-row { padding: 16px 16px 0 !important; }
+          .item-info-card { padding: 18px !important; }
+          .item-overview-grid { grid-template-columns: 1fr !important; }
+          .item-seller-stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+          .item-right-sidebar { position: static !important; top: auto !important; }
 
-          /* Public profile */
+          /* ── Public profile ─────────────────────────────────────────── */
+          .pubprofile-hero { padding: 24px 16px 80px !important; }
+          .pubprofile-content { padding: 0 16px !important; margin-top: -52px !important; }
           .pub-profile-grid {
             grid-template-columns: 1fr !important;
-            padding: 0 16px !important;
+            gap: 16px !important;
+          }
+          .pubprofile-listing-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+            gap: 12px !important;
           }
 
-          /* Browse */
+          /* ── Browse ──────────────────────────────────────────────────── */
           .browse-grid {
             padding: 12px 16px !important;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .browse-header { padding: 24px 16px 32px !important; }
+          .browse-filter-row { flex-direction: column !important; align-items: stretch !important; }
+          .browse-filter-row > * { min-width: 0 !important; width: 100% !important; }
+          .browse-catbar-row { padding: 10px 16px !important; }
+          .browse-result-row, .browse-status-row { padding-left: 16px !important; padding-right: 16px !important; }
+
+          /* ── Home ────────────────────────────────────────────────────── */
+          .home-hero { padding: 40px 16px 56px !important; }
+          .home-hero-title { font-size: 32px !important; }
+          .home-hero-stats { gap: 20px !important; }
+          .home-section { padding: 40px 16px 0 !important; }
+          .home-category-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .home-feature-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+          }
+          .home-section-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .home-cta-box, .home-credits-box {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 28px 20px !important;
+            text-align: left !important;
+          }
+          .home-listing-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
           }
 
-          /* Page padding */
-          .page-inner-pad { padding: 0 16px !important; }
+          /* ── Profile ─────────────────────────────────────────────────── */
+          .profile-hero { padding: 24px 16px 64px !important; }
+          .profile-content { padding: 0 16px !important; margin-top: -36px !important; }
+          .profile-header-card { padding: 20px 16px !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
+          .profile-header-info { width: 100% !important; }
+          .profile-header-card button { width: 100% !important; justify-content: center !important; }
+          .profile-tabs { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+          .profile-tabs::-webkit-scrollbar { display: none; }
+          .profile-tabs button { white-space: nowrap; flex-shrink: 0; }
+          .profile-basic-grid,
+          .profile-account-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .profile-listing-grid,
+          .wishlist-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .section-card-pad { padding: 16px !important; }
+          .section-card-header { padding: 14px 16px 12px !important; flex-wrap: wrap; gap: 8px; }
 
-          /* Hero sections */
-          .hero-section { padding: 40px 20px 60px !important; }
+          /* ── Sell form ───────────────────────────────────────────────── */
+          .sell-hero { padding: 24px 16px 32px !important; }
+          .sell-content { padding: 0 16px !important; }
+          .sell-form-card { padding: 20px !important; }
+          .sell-category-grid {
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+            gap: 8px !important;
+          }
+          .sell-fields-grid,
+          .sell-pricing-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .sell-photo-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+          }
+
+          /* ── Wishlist / generic page headers ─────────────────────────── */
+          .page-header-band { padding: 24px 16px 32px !important; }
+          .page-inner-pad { padding: 16px !important; }
+
+          /* ── Modals: keep inside viewport ────────────────────────────── */
+          .modal-card {
+            max-height: 88vh !important;
+            overflow-y: auto !important;
+            padding: 24px 18px !important;
+            border-radius: 16px !important;
+          }
+
+          /* ── Toast ───────────────────────────────────────────────────── */
+          .app-toast {
+            left: 16px !important;
+            right: 16px !important;
+            bottom: 16px !important;
+            justify-content: center !important;
+          }
+
+          /* ── Auth screens (Login/Signup/etc) ─────────────────────────── */
+          .auth-wrapper { padding: 24px 12px !important; }
+          .auth-card { padding: 28px 20px !important; border-radius: 18px !important; }
         }
 
-        /* ── Responsive: Small mobile (≤420px) ── */
-        @media (max-width: 420px) {
-          .browse-grid { grid-template-columns: 1fr 1fr !important; }
-          .stat-grid-home { grid-template-columns: 1fr 1fr !important; }
-          .chat-layout aside { display: none !important; }
+        /* ══════════════════════════════════════════════════════════════════
+           Responsive: Small mobile (≤480px)
+           ══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 480px) {
+          .browse-grid,
+          .home-listing-grid,
+          .profile-listing-grid,
+          .wishlist-grid,
+          .pubprofile-listing-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+          }
+          .home-category-grid { grid-template-columns: 1fr 1fr !important; }
+          .home-stat-grid { grid-template-columns: 1fr 1fr !important; }
+          .item-seller-stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .sell-photo-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .sell-category-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .home-hero-title { font-size: 26px !important; }
+          .home-hero-stats { gap: 14px !important; flex-wrap: wrap; justify-content: center; }
+          .auth-card { padding: 24px 16px !important; }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           Responsive: Extra small (≤360px)
+           ══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 360px) {
+          .nav-links-wrap { max-width: 50vw; }
+          .nav-campus-trigger span { max-width: 50px !important; }
+          .browse-grid,
+          .home-listing-grid,
+          .profile-listing-grid,
+          .wishlist-grid,
+          .pubprofile-listing-grid,
+          .home-category-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .sell-photo-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
     </div>

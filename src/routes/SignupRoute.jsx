@@ -122,8 +122,8 @@ export default function SignupRoute({ authError, authLoading, signupPending, sig
       <div style={{ position: "absolute", top: -100, right: -100, width: 400, height: 400, borderRadius: "50%", background: "rgba(252,211,77,0.08)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: -80, left: -80, width: 300, height: 300, borderRadius: "50%", background: "rgba(124,58,237,0.25)", pointerEvents: "none" }} />
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: 1, padding: "40px 20px", position: "relative", zIndex: 1 }}>
-        <div style={{
+      <div className="auth-wrapper" style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: 1, padding: "40px 20px", position: "relative", zIndex: 1 }}>
+        <div className="auth-card" style={{
           background: "#fff",
           borderRadius: 24,
           padding: "40px 36px",

@@ -21,6 +21,7 @@ export default function Toast({ show, message, icon = "✅", onDone, duration = 
 
   return (
     <div
+      className="app-toast"
       style={{
         position: "fixed", bottom: 24, right: 24, zIndex: 2000,
         display: "flex", alignItems: "center", gap: 10,

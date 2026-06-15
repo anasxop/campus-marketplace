@@ -154,7 +154,7 @@ export default function BrowseRoute({
     <div style={{ paddingBottom: 72, minHeight: "calc(100vh - 64px)", background: "#f9f9fb" }}>
 
       {/* ── Page header ── */}
-      <div style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 44px", position: "relative" }}>
+      <div className="browse-header" style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 44px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -60, right: -60, width: 280, height: 280, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -30, left: "40%", width: 160, height: 160, borderRadius: "50%", background: "rgba(252,211,77,0.07)", pointerEvents: "none" }} />
 
@@ -162,7 +162,7 @@ export default function BrowseRoute({
           <h1 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 30, fontWeight: 800, color: "#fff", letterSpacing: "-0.4px", margin: "0 0 6px" }}>Browse listings</h1>
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.60)", margin: "0 0 24px" }}>Find textbooks, electronics, furniture and more from students near you.</p>
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
+          <div className="browse-filter-row" style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
             <div style={{ flex: 1, position: "relative", minWidth: 240 }}>
               <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "#9898a8", pointerEvents: "none" }}>🔍</span>
               <input
@@ -183,7 +183,7 @@ export default function BrowseRoute({
       <div ref={catBarRef} style={{ background: "rgba(255,255,255,0.92)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderBottom: "1px solid #e5e5ec", boxShadow: "0 4px 16px rgba(14,0,40,0.05)", position: "sticky", top: 64, zIndex: 90 }}>
 
         {/* Top-level pills row */}
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", gap: 8, padding: "12px 32px 12px", overflowX: "auto", scrollbarWidth: "none", alignItems: "center" }}>
+        <div className="browse-catbar-row" style={{ maxWidth: 1200, margin: "0 auto", display: "flex", gap: 8, padding: "12px 32px 12px", overflowX: "auto", scrollbarWidth: "none", alignItems: "center" }}>
           {["All", ...topCatKeys].map(cat => {
             const isTopActive = catFilter === cat || activeCat === cat;
             const isSubActive = catFilter !== cat && CATEGORY_TREE[cat]?.subcategories?.includes(catFilter);
@@ -247,7 +247,7 @@ export default function BrowseRoute({
       </div>
 
       {/* ── Result count ── */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 6px", boxSizing: "border-box" }}>
+      <div className="browse-result-row" style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 6px", boxSizing: "border-box" }}>
         <p style={{ fontSize: 13, color: "#9898a8", margin: 0 }}>
           <strong style={{ color: "#14141f" }}>{filtered.length}</strong> listing{filtered.length !== 1 ? "s" : ""} found
           {catFilter !== "All" && <> in <strong style={{ color: "#5c22d4" }}>{catFilter}</strong></>}
@@ -258,7 +258,7 @@ export default function BrowseRoute({
       </div>
 
       {/* ── Status filter pills ── */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px 6px", boxSizing: "border-box" }}>
+      <div className="browse-status-row" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px 6px", boxSizing: "border-box" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {["All", ...LISTING_STATUSES].map(opt => {
             const active = statusFilter === opt;

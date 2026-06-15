@@ -62,11 +62,11 @@ export default function VerifyEmailRoute({ token, onVerify, onGoLogin, onGoDashb
       <div style={{ position: "absolute", top: -100, right: -100, width: 400, height: 400, borderRadius: "50%", background: "rgba(252,211,77,0.08)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: -60, left: -60, width: 250, height: 250, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
 
-      <div style={{
+      <div className="auth-wrapper" style={{
         display: "flex", alignItems: "center", justifyContent: "center",
         flex: 1, padding: "40px 20px", position: "relative", zIndex: 1,
       }}>
-        <div style={{
+        <div className="auth-card" style={{
           background: "#fff",
           borderRadius: 24,
           padding: "44px 40px",

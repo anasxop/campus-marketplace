@@ -68,9 +68,9 @@ export function ProductCard({ item, discount, isWished, onToggleWishlist, onClic
           <span style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 18, fontWeight: 800, color: "#14141f" }}>₹{item.price.toLocaleString()}</span>
           {disc > 0 && <span style={{ fontSize: 12, color: "#9898a8", textDecoration: "line-through" }}>₹{item.originalPrice.toLocaleString()}</span>}
         </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
-          <p style={{ fontSize: 12, color: "#9898a8", fontWeight: 500, margin: 0 }}>📍 {item.college}</p>
-          {item.seller && <p style={{ fontSize: 11, color: "#b0b0c0", margin: 0, fontWeight: 500 }}>by {item.seller}</p>}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2, gap: 6 }}>
+          <p style={{ fontSize: 12, color: "#9898a8", fontWeight: 500, margin: 0, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>📍 {item.college}</p>
+          {item.seller && <p style={{ fontSize: 11, color: "#b0b0c0", margin: 0, fontWeight: 500, flexShrink: 0, whiteSpace: "nowrap" }}>by {item.seller}</p>}
         </div>
       </div>
     </div>
@@ -93,19 +93,19 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
   return (
     <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       {/* Hero */}
-      <div style={{ ...s.heroBox, position: "relative", overflow: "hidden", padding: "80px 32px 100px", background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 70%, #7c3aed 100%)" }}>
+      <div className="home-hero" style={{ ...s.heroBox, position: "relative", overflow: "hidden", padding: "80px 32px 100px", background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 70%, #7c3aed 100%)" }}>
         <div style={{ position: "absolute", top: -100, right: -100, width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(252,211,77,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -80, left: -80, width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
           <span style={{ display: "inline-block", background: "rgba(252,211,77,0.15)", border: "1px solid rgba(252,211,77,0.35)", color: "#fde68a", fontSize: 12, fontWeight: 700, padding: "5px 18px", borderRadius: 999, letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 24, backdropFilter: "blur(8px)" }}>🎓 Campus-to-Campus Resale Platform</span>
-          <h1 style={{ ...s.heroTitle, marginBottom: 20, fontSize: 46, lineHeight: 1.15 }}>Buy & sell student<br /><span style={{ color: "#fcd34d", textShadow: "0 0 40px rgba(252,211,77,0.4)" }}>essentials</span> — easily.</h1>
+          <h1 className="home-hero-title" style={{ ...s.heroTitle, marginBottom: 20, fontSize: 46, lineHeight: 1.15 }}>Buy & sell student<br /><span style={{ color: "#fcd34d", textShadow: "0 0 40px rgba(252,211,77,0.4)" }}>essentials</span> — easily.</h1>
           <p style={{ ...s.heroSub, fontSize: 17, marginBottom: 44, maxWidth: 500, margin: "0 auto 44px" }}>Moving out? Don't leave your stuff behind.<br />Sell it to the next student in minutes.</p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <button style={s.heroCta} onClick={() => navigateTo("/browse")} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px) scale(1.04)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(251,191,36,0.60)"; }} onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 4px 20px rgba(251,191,36,0.35)"; }}>Browse listings →</button>
             <button style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.10)", border: "1.5px solid rgba(255,255,255,0.28)", color: "#fff", fontFamily: "'DM Sans', system-ui, sans-serif", fontWeight: 600, fontSize: 15, padding: "14px 30px", borderRadius: 12, cursor: "pointer", transition: "all 200ms ease", backdropFilter: "blur(12px)" }} onClick={() => navigateTo("/sell")} onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.20)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; e.currentTarget.style.transform = ""; }}>+ List an item</button>
           </div>
-          <div style={{ display: "flex", gap: 40, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
+          <div className="home-hero-stats" style={{ display: "flex", gap: 40, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
             {[["🛍️", realTotal > 0 ? `${realTotal}` : "0", "Items Listed"], ["💸", realAvgDiscount > 0 ? `${realAvgDiscount}%` : "—", "Avg. Discount"], ["🏫", realColleges > 0 ? `${realColleges}` : "—", "Campuses"], ["⚡", "Live", "Real-time Chat"]].map(([icon, val, lbl]) => (
               <div key={lbl} style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 28, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{icon} {val}</div>
@@ -117,15 +117,15 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
       </div>
 
       {/* Categories - main 4 highlighted */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0", boxSizing: "border-box" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+      <div className="home-section" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0", boxSizing: "border-box" }}>
+        <div className="home-section-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
           <div>
             <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 23, fontWeight: 800, color: "#14141f", letterSpacing: "-0.3px", margin: 0 }}>Browse by category</h2>
             <p style={{ fontSize: 14, color: "#9898a8", margin: "5px 0 0" }}>Jump straight into what you need</p>
           </div>
           <button style={{ fontSize: 13, fontWeight: 600, color: "#5c22d4", background: "linear-gradient(135deg,#f3ecfe,#ece0fd)", border: "1.5px solid #e0d0fd", cursor: "pointer", padding: "8px 16px", borderRadius: 10, transition: "all 180ms ease", fontFamily: "'DM Sans', system-ui, sans-serif" }} onClick={() => navigateTo("/browse")} onMouseEnter={e => { e.currentTarget.style.background = "linear-gradient(135deg,#ece0fd,#ddd0fb)"; e.currentTarget.style.transform = "translateY(-1px)"; }} onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg,#f3ecfe,#ece0fd)"; e.currentTarget.style.transform = ""; }}>View All Categories →</button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+        <div className="home-category-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
           {CATEGORIES.map((cat, i) => {
             const count = listings.filter(l => cat.count_cat.some(c => l.category?.toLowerCase() === c.toLowerCase())).length;
             const isHov = hoveredCat === i;
@@ -152,8 +152,8 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
       </div>
 
       {/* Recent Listings filtered by campus */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0", boxSizing: "border-box" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
+      <div className="home-section" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0", boxSizing: "border-box" }}>
+        <div className="home-section-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
           <div>
             <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 23, fontWeight: 800, color: "#14141f", letterSpacing: "-0.3px", margin: 0 }}>
               Recent listings
@@ -173,7 +173,7 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
             <button style={{ background: "#5c22d4", color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontFamily: "'DM Sans', system-ui, sans-serif", fontWeight: 700, fontSize: 14, cursor: "pointer", boxShadow: "0 6px 24px rgba(92,34,212,0.28)" }} onClick={() => navigateTo("/sell")}>+ Post your first listing</button>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
+          <div className="home-listing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
             {filteredListings.slice(0, 8).map((item, idx) => (
               <ProductCard key={item.id} item={item} discount={discount} isWished={wishlist.includes(item.id)} onToggleWishlist={toggleWishlist} onClick={() => openItem(item.id)} hovered={hoveredCard === item.id} onHover={() => setHoveredCard(item.id)} onLeave={() => setHoveredCard(null)} animDelay={idx * 50} />
             ))}
@@ -182,12 +182,12 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
       </div>
 
       {/* Why section */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 32px 0", boxSizing: "border-box" }}>
+      <div className="home-section" style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 32px 0", boxSizing: "border-box" }}>
         <div style={{ textAlign: "center", marginBottom: 38 }}>
           <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 27, fontWeight: 800, color: "#14141f", margin: "0 0 10px", letterSpacing: "-0.4px" }}>Why Campus Marketplace?</h2>
           <p style={{ fontSize: 15, color: "#9898a8", maxWidth: 460, margin: "0 auto" }}>Built by students, for students. Everything you need for campus-focused resale.</p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
+        <div className="home-feature-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
           {FEATURES.map((f, i) => (
             <div key={f.title} style={{ background: hoveredFeat === i ? "rgba(243,236,254,0.95)" : "rgba(255,255,255,0.80)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderRadius: 20, border: hoveredFeat === i ? "1px solid #e0d0fd" : "1px solid rgba(229,229,236,0.70)", padding: "30px 26px", transition: "transform 220ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 220ms ease, background 220ms ease", transform: hoveredFeat === i ? "translateY(-5px)" : "translateY(0)", boxShadow: hoveredFeat === i ? "0 20px 48px rgba(92,34,212,0.14), inset 0 1px 0 rgba(255,255,255,0.8)" : "0 2px 12px rgba(14,0,40,0.06), inset 0 1px 0 rgba(255,255,255,0.6)" }} onMouseEnter={() => setHoveredFeat(i)} onMouseLeave={() => setHoveredFeat(null)}>
               <div style={{ fontSize: 34, marginBottom: 16 }}>{f.icon}</div>
@@ -200,7 +200,7 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
 
       {/* CTA */}
       <div style={{ maxWidth: 1200, margin: "56px auto 0", padding: "0 32px", boxSizing: "border-box" }}>
-        <div style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 70%, #7c3aed 100%)", borderRadius: 24, padding: "52px 44px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 28, position: "relative", overflow: "hidden" }}>
+        <div className="home-cta-box" style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 70%, #7c3aed 100%)", borderRadius: 24, padding: "52px 44px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 28, position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", top: -50, right: -50, width: 250, height: 250, borderRadius: "50%", background: "rgba(252,211,77,0.07)", pointerEvents: "none" }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 26, fontWeight: 800, color: "#fff", margin: "0 0 10px", letterSpacing: "-0.3px" }}>Got something to sell?</h2>
@@ -212,7 +212,7 @@ export default function HomeRoute({ discount, listings, navigateTo, openItem, st
 
       {/* Credits */}
       <div style={{ maxWidth: 1200, margin: "48px auto 0", padding: "0 32px 80px", boxSizing: "border-box" }}>
-        <div style={{ background: "rgba(250,247,255,0.85)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderRadius: 20, border: "1.5px solid #e0d0fd", padding: "28px 36px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, boxShadow: "0 4px 20px rgba(92,34,212,0.08), inset 0 1px 0 rgba(255,255,255,0.8)" }}>
+        <div className="home-credits-box" style={{ background: "rgba(250,247,255,0.85)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderRadius: 20, border: "1.5px solid #e0d0fd", padding: "28px 36px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, boxShadow: "0 4px 20px rgba(92,34,212,0.08), inset 0 1px 0 rgba(255,255,255,0.8)" }}>
           <div>
             <p style={{ fontSize: 12, fontWeight: 700, color: "#9898a8", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 6 }}>Made with ❤️ by</p>
             <p style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 18, fontWeight: 800, color: "#14141f", margin: 0 }}>Anas, Kaif &amp; Sakshi</p>

@@ -75,6 +75,7 @@ export default function ReportModal({
       onClick={onClose}
     >
       <div
+        className="modal-card"
         style={{ background: "#fff", borderRadius: 20, padding: "32px 28px", maxWidth: 420, width: "100%", boxShadow: "0 24px 80px rgba(14,0,40,0.22)", animation: "fadeUp 0.25s ease both" }}
         onClick={e => e.stopPropagation()}
       >

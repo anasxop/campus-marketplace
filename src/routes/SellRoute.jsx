@@ -110,7 +110,7 @@ function CategoryPicker({ selected, onSelect }) {
         <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#5c22d4,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 14, fontFamily: "'Syne', system-ui, sans-serif" }}>1</div>
         <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 16, fontWeight: 800, color: "#14141f", margin: 0 }}>Choose a category</h2>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
+      <div className="sell-category-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
         {topCats.map(cat => {
           const info = CATEGORY_TREE[cat];
           const isActive = selected === cat;
@@ -183,7 +183,7 @@ function CategoryFields({ topCategory, extraFields, setExtraFields }) {
           <p style={{ fontSize: 12, color: "#9898a8", margin: 0 }}>Fields specific to {topCategory.toLowerCase()} listings</p>
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div className="sell-fields-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         {fields.map(field => (
           <div key={field.key} style={{ gridColumn: field.type === "url" || field.key === "accessoriesIncluded" ? "1 / -1" : "auto" }}>
             <Field label={field.label}>
@@ -257,7 +257,7 @@ export default function SellRoute({ categories, handlePost, newListing, posted, 
   return (
     <div style={{ background: "#f9f9fb", minHeight: "calc(100vh - 64px)", paddingBottom: 80 }}>
       {/* Hero header */}
-      <div style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 44px", position: "relative", overflow: "hidden" }}>
+      <div className="sell-hero" style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 44px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -60, right: -60, width: 250, height: 250, borderRadius: "50%", background: "rgba(252,211,77,0.07)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 700, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <span style={{ display: "inline-block", background: "rgba(252,211,77,0.15)", border: "1px solid rgba(252,211,77,0.35)", color: "#fde68a", fontSize: 11, fontWeight: 700, padding: "4px 14px", borderRadius: 999, letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 16 }}>
@@ -272,14 +272,14 @@ export default function SellRoute({ categories, handlePost, newListing, posted, 
         </div>
       </div>
 
-      <div style={{ maxWidth: 700, margin: "-24px auto 0", padding: "0 24px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
+      <div className="sell-content" style={{ maxWidth: 700, margin: "-24px auto 0", padding: "0 24px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
         {posted && (
           <div style={{ background: "linear-gradient(135deg, #d1fae5, #a7f3d0)", color: "#065f46", borderRadius: 14, padding: "16px 20px", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", gap: 10, marginBottom: 20, border: "1px solid #6ee7b7", boxShadow: "0 4px 20px rgba(16,185,129,0.20)" }}>
             ✅ Listing posted successfully! Redirecting to browse...
           </div>
         )}
 
-        <div style={{ background: "#fff", borderRadius: 24, border: "1px solid #e5e5ec", boxShadow: "0 8px 40px rgba(14,0,40,0.10)", padding: "36px", boxSizing: "border-box" }}>
+        <div className="sell-form-card" style={{ background: "#fff", borderRadius: 24, border: "1px solid #e5e5ec", boxShadow: "0 8px 40px rgba(14,0,40,0.10)", padding: "36px", boxSizing: "border-box" }}>
 
           {/* ── Step 1: Category picker ── */}
           <div style={{ marginBottom: 28 }}>
@@ -346,7 +346,7 @@ export default function SellRoute({ categories, handlePost, newListing, posted, 
               <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 16, fontWeight: 800, color: "#14141f", margin: 0 }}>Pricing</h2>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: isService ? "1fr" : "1fr 1fr", gap: 16 }}>
+            <div className="sell-pricing-grid" style={{ display: "grid", gridTemplateColumns: isService ? "1fr" : "1fr 1fr", gap: 16 }}>
               <div>
                 <label style={LABEL_STYLE}>{isService ? "Service price (₹)" : "Your selling price (₹)"}</label>
                 <input style={INPUT_STYLE} type="number" placeholder={isService ? "500" : "1200"} value={newListing.price} onChange={e => setNewListing(c => ({ ...c, price: e.target.value }))} onFocus={onFocus} onBlur={onBlur} />
@@ -401,7 +401,7 @@ export default function SellRoute({ categories, handlePost, newListing, posted, 
             </label>
 
             {imageFiles.length > 0 && (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginTop: 16 }}>
+              <div className="sell-photo-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginTop: 16 }}>
                 {imageFiles.map((file, idx) => {
                   const url = previewURL(file);
                   return (

@@ -341,7 +341,7 @@ export default function PublicProfileRoute({
     <div style={{ background: "#f9f9fb", minHeight: "calc(100vh - 64px)", paddingBottom: 80 }}>
 
       {/* ── Hero banner ── */}
-      <div style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "40px 32px 100px", position: "relative", overflow: "hidden" }}>
+      <div className="pubprofile-hero" style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "40px 32px 100px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -80, right: -80, width: 320, height: 320, borderRadius: "50%", background: "rgba(252,211,77,0.06)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -40, left: "30%", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
@@ -362,7 +362,7 @@ export default function PublicProfileRoute({
       </div>
 
       {/* ── Main content ── */}
-      <div style={{ maxWidth: 1100, margin: "-68px auto 0", padding: "0 32px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
+      <div className="pubprofile-content" style={{ maxWidth: 1100, margin: "-68px auto 0", padding: "0 32px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
         <div className="pub-profile-grid" style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 24, alignItems: "start" }}>
 
           {/* ═══ LEFT SIDEBAR ═══ */}
@@ -554,7 +554,7 @@ export default function PublicProfileRoute({
                     </p>
                   </div>
                 ) : (
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 18, animation: "fadeUp 0.3s ease both" }}>
+                  <div className="pubprofile-listing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 18, animation: "fadeUp 0.3s ease both" }}>
                     {tabListings.map((item, idx) => (
                       <ProductCard
                         key={item.id} item={item}

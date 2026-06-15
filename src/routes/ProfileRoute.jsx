@@ -55,14 +55,14 @@ function ErrorBanner({ msg }) {
 function SectionCard({ title, icon, children, extra }) {
   return (
     <div style={{ background: c.white, borderRadius: 20, border: `1px solid ${c.border}`, boxShadow: "0 4px 20px rgba(14,0,40,0.07)", overflow: "hidden", marginBottom: 20 }}>
-      <div style={{ padding: "18px 24px 14px", borderBottom: `1px solid ${c.border}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="section-card-header" style={{ padding: "18px 24px 14px", borderBottom: `1px solid ${c.border}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 18 }}>{icon}</span>
           <h3 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 15, fontWeight: 800, color: c.text, margin: 0 }}>{title}</h3>
         </div>
         {extra}
       </div>
-      <div style={{ padding: "20px 24px" }}>{children}</div>
+      <div className="section-card-pad" style={{ padding: "20px 24px" }}>{children}</div>
     </div>
   );
 }
@@ -272,7 +272,7 @@ export default function ProfileRoute({
       `}</style>
 
       {/* ── Hero ── */}
-      <div style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 80px", position: "relative", overflow: "hidden" }}>
+      <div className="profile-hero" style={{ background: "linear-gradient(135deg, #1e0757 0%, #2d1260 30%, #5c22d4 100%)", padding: "36px 32px 80px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -60, right: -60, width: 250, height: 250, borderRadius: "50%", background: "rgba(252,211,77,0.06)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <h1 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 26, fontWeight: 800, color: "#fff", margin: "0 0 4px" }}>My Profile</h1>
@@ -280,14 +280,14 @@ export default function ProfileRoute({
         </div>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "-48px auto 0", padding: "0 32px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
+      <div className="profile-content" style={{ maxWidth: 1100, margin: "-48px auto 0", padding: "0 32px", boxSizing: "border-box", position: "relative", zIndex: 10 }}>
 
         {/* ═══ PROFILE HEADER CARD ═══ */}
-        <div style={{ background: c.white, borderRadius: 24, border: `1px solid ${c.border}`, boxShadow: "0 8px 40px rgba(14,0,40,0.12)", padding: "28px 32px", marginBottom: 24, animation: "fadeUp 0.35s ease both" }}>
+        <div className="profile-header-card" style={{ background: c.white, borderRadius: 24, border: `1px solid ${c.border}`, boxShadow: "0 8px 40px rgba(14,0,40,0.12)", padding: "28px 32px", marginBottom: 24, animation: "fadeUp 0.35s ease both" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
             <AvatarEditor user={user} photoURL={photoURL} uploading={photoUploading} onUpload={handlePhotoUpload} />
 
-            <div style={{ flex: 1, minWidth: 200 }}>
+            <div className="profile-header-info" style={{ flex: 1, minWidth: 200 }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                 <h2 style={{ fontFamily: "'Syne', system-ui, sans-serif", fontSize: 22, fontWeight: 800, color: c.text, letterSpacing: "-0.3px", margin: 0 }}>
                   {user?.name || "Your Name"}
@@ -329,7 +329,7 @@ export default function ProfileRoute({
         </div>
 
         {/* ═══ TABS ═══ */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 24, flexWrap: "wrap" }}>
+        <div className="profile-tabs" style={{ display: "flex", gap: 6, marginBottom: 24, flexWrap: "wrap" }}>
           {[
             ["listings",  `My Listings (${listedItems.length})`],
             ["edit",      "✏️ Edit Profile"],
@@ -379,7 +379,7 @@ export default function ProfileRoute({
               {profileError && <ErrorBanner msg={profileError} />}
               {profileSaved && <SuccessBanner msg="Profile updated successfully!" />}
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div className="profile-basic-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
                 <div>
                   <Label>Display name *</Label>
                   <input style={inp} value={name} onChange={e => setName(e.target.value)} {...focusH} placeholder="Your full name" />
@@ -487,7 +487,7 @@ export default function ProfileRoute({
               {googleMsg && <SuccessBanner msg={googleMsg} />}
               {googleErr && <ErrorBanner msg={googleErr} />}
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: "#f9f9fb", borderRadius: 12, border: `1px solid ${c.border}` }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: "#f9f9fb", borderRadius: 12, border: `1px solid ${c.border}`, flexWrap: "wrap", gap: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   {/* Google SVG icon */}
                   <svg width="24" height="24" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.6 32.4 29.2 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 7.2 29 5 24 5 12.4 5 3 14.4 3 26s9.4 21 21 21 21-9.4 21-21c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 15.5l6.6 4.8C14.4 17 18.9 14 24 14c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 8.2 29 6 24 6 16.3 6 9.7 9.9 6.3 15.5z"/><path fill="#4CAF50" d="M24 46c5 0 9.5-1.9 12.9-4.9l-6-5.2C29.2 37.6 26.7 38.5 24 38.5c-5.2 0-9.6-3.5-11.2-8.3l-6.5 5C9.5 42 16.2 46 24 46z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.5l6 5.2C43 35.1 45 31 45 26c0-1.3-.1-2.6-.4-3.9z"/></svg>
@@ -514,7 +514,7 @@ export default function ProfileRoute({
 
             {/* Account Info (read-only) */}
             <SectionCard title="Account Info" icon="ℹ️">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div className="profile-account-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                 {[
                   ["Email", user?.email || "—"],
                   ["User ID", user?.id ? `#${user.id}` : "—"],
@@ -549,7 +549,7 @@ export default function ProfileRoute({
                 </button>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
+              <div className="profile-listing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 20 }}>
                 {listedItems.map((item, idx) => {
                   const itemStatus = normalizeStatus(item.status);
                   return (

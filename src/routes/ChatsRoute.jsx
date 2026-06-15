@@ -41,6 +41,7 @@ export default function ChatsRoute({
   const messagesEndRef = useRef(null);
   const [showReportUser, setShowReportUser] = useState(false);
   const [reportToast, setReportToast] = useState(false);
+  const [mobileView, setMobileView] = useState("list"); // "list" | "chat" — only matters on small screens
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,8 +51,13 @@ export default function ChatsRoute({
     setChatInput(prompt);
   };
 
+  const handleSelectConversation = (id) => {
+    onSelectConversation(id);
+    setMobileView("chat");
+  };
+
   return (
-    <div className="chat-layout" style={{
+    <div className="chat-layout" data-mobile-view={mobileView} style={{
       display: "grid", gridTemplateColumns: "310px 1fr",
       height: "calc(100vh - 64px)", overflow: "hidden",
       background: "#f9f9fb",
@@ -124,7 +130,7 @@ export default function ChatsRoute({
                   transition: "background 160ms ease",
                   marginBottom: 2, outline: "none",
                 }}
-                onClick={() => onSelectConversation(convo.id)}
+                onClick={() => handleSelectConversation(convo.id)}
                 onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#f9f9fb"; }}
                 onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
               >
@@ -185,6 +191,14 @@ export default function ChatsRoute({
               display: "flex", alignItems: "center", gap: 14,
               boxShadow: "0 2px 12px rgba(14,0,40,0.05)",
             }}>
+              <button
+                className="chat-back-btn"
+                style={{ display: "none", alignItems: "center", justifyContent: "center", width: 34, height: 34, borderRadius: 10, background: "#f3ecfe", border: "none", color: "#5c22d4", fontSize: 16, cursor: "pointer", flexShrink: 0 }}
+                onClick={() => setMobileView("list")}
+                title="Back to chats"
+              >
+                ←
+              </button>
               <img
                 src={getImageSrc(currentConversation.product?.image)}
                 alt={currentConversation.product?.title}
@@ -226,7 +240,7 @@ export default function ChatsRoute({
             </div>
 
             {/* Messages */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 12 }}>
+            <div className="chat-messages-pane" style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 12 }}>
               {chatsLoading && (
                 <div style={{ textAlign: "center", padding: "20px" }}>
                   <div style={{ display: "inline-block", width: 24, height: 24, border: "3px solid #e0d0fd", borderTopColor: "#5c22d4", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
@@ -269,7 +283,7 @@ export default function ChatsRoute({
                   <div key={message.id} style={{ display: "flex", justifyContent: mine ? "flex-end" : "flex-start", gap: 8, alignItems: "flex-end" }}>
                     {!mine && showName && <ConvoAvatar name={currentConversation.otherUser?.name} photoURL={currentConversation.otherUser?.photoURL} />}
                     {!mine && !showName && <div style={{ width: 38 }} />}
-                    <div style={{ maxWidth: "68%" }}>
+                    <div className="chat-bubble-wrap" style={{ maxWidth: "68%" }}>
                       {showName && !mine && (
                         <p style={{ fontSize: 11, fontWeight: 700, color: "#9898a8", marginBottom: 4, marginLeft: 4 }}>
                           {message.senderName || currentConversation.otherUser?.name}
@@ -299,7 +313,7 @@ export default function ChatsRoute({
             </div>
 
             {/* Smart prompts + Composer */}
-            <div style={{ background: "rgba(255,255,255,0.97)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderTop: "1px solid #e5e5ec", padding: "10px 16px 14px" }}>
+            <div className="chat-composer-pane" style={{ background: "rgba(255,255,255,0.97)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderTop: "1px solid #e5e5ec", padding: "10px 16px 14px" }}>
               {/* Smart prompts */}
               <div style={{ display: "flex", gap: 7, marginBottom: 10, overflowX: "auto", scrollbarWidth: "none", paddingBottom: 2 }}>
                 {SMART_PROMPTS.map(prompt => (
