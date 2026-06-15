@@ -568,7 +568,7 @@ export default function App() {
               onMouseLeave={e => e.currentTarget.style.background = "linear-gradient(135deg, #f3ecfe, #faf7ff)"}
             >
               <IconPin />
-              <span style={{ maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span className="nav-campus-trigger-label" style={{ maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {selectedCampus}
               </span>
               <div style={{ transform: campusDropdownOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 200ms ease" }}>
@@ -1128,7 +1128,8 @@ export default function App() {
           .nav-left { gap: 8px !important; flex: 1 1 auto; min-width: 0; }
           .nav-logo { font-size: 16px !important; white-space: nowrap; }
           .nav-campus-selector { flex-shrink: 0; }
-          .nav-campus-trigger span { max-width: 80px !important; }
+          .nav-campus-trigger span,
+          .nav-campus-trigger-label { max-width: 80px !important; }
           .nav-campus-menu { left: auto !important; right: 0 !important; width: 88vw !important; max-width: 320px !important; min-width: 0 !important; }
           .nav-campus-label { display: none !important; }
           .nav-links-wrap {
@@ -1226,7 +1227,8 @@ export default function App() {
           .profile-content { padding: 0 16px !important; margin-top: -36px !important; }
           .profile-header-card { padding: 20px 16px !important; flex-direction: column !important; align-items: flex-start !important; text-align: left !important; }
           .profile-header-info { width: 100% !important; }
-          .profile-header-card button { width: 100% !important; justify-content: center !important; }
+          .profile-header-card > div { flex-wrap: wrap !important; }
+          .profile-view-profile-btn { width: 100% !important; justify-content: center !important; }
           .profile-tabs { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
           .profile-tabs::-webkit-scrollbar { display: none; }
           .profile-tabs button { white-space: nowrap; flex-shrink: 0; }
@@ -1310,7 +1312,8 @@ export default function App() {
            ══════════════════════════════════════════════════════════════════ */
         @media (max-width: 360px) {
           .nav-links-wrap { max-width: 50vw; }
-          .nav-campus-trigger span { max-width: 50px !important; }
+          .nav-campus-trigger span,
+          .nav-campus-trigger-label { max-width: 50px !important; }
           .browse-grid,
           .home-listing-grid,
           .profile-listing-grid,
@@ -1320,6 +1323,74 @@ export default function App() {
             grid-template-columns: 1fr !important;
           }
           .sell-photo-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════
+           Additional mobile polish
+           ══════════════════════════════════════════════════════════════════ */
+
+        /* Notification slide-panel: cap to full viewport on mobile */
+        @media (max-width: 640px) {
+          /* Notification panel is already min(420px,100vw) in JS — just ensure
+             the overlay backdrop works correctly on iOS */
+          body.notif-open { overflow: hidden; }
+
+          /* Dashboard: collapse the 2-col stat grid + main grid */
+          .db-stat-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+          .db-grid-main { grid-template-columns: 1fr !important; }
+          .db-right-col { position: static !important; max-height: none !important; overflow-y: visible !important; }
+          .db-hero { padding: 24px 16px 40px !important; }
+          .db-content { padding: 0 12px !important; margin-top: -20px !important; }
+          .db-hero-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+
+          /* PublicProfile: stat pill row should wrap on tiny screens */
+          .pub-stat-row { flex-wrap: wrap !important; }
+          /* PublicProfile action buttons full width */
+          .pub-profile-actions button { width: 100% !important; justify-content: center !important; }
+
+          /* Profile header: avatar + info row stacks nicely */
+          .profile-header-card > div { flex-wrap: wrap !important; }
+
+          /* Category cards: maintain minimum touch target */
+          .home-category-grid > div { min-height: 110px !important; }
+
+          /* Browse filter: college dropdown fills width */
+          .browse-filter-row .nav-campus-selector,
+          .browse-filter-row > div { width: 100% !important; min-width: 0 !important; }
+
+          /* Sell: category picker tiles readable on small screens */
+          .sell-category-grid > button { padding: 14px 10px !important; }
+
+          /* Chat smart-prompt chips: smaller text on phones */
+          .chat-composer-pane button { font-size: 11px !important; padding: 5px 10px !important; }
+
+          /* Modals: don't let the backdrop padding squish the card */
+          .modal-overlay { padding: 16px !important; align-items: flex-end !important; }
+          .modal-card { border-radius: 20px 20px 0 0 !important; max-height: 92vh !important; }
+
+          /* Prevent product card text truncation issues */
+          .product-card-body { padding: 10px 12px 14px !important; }
+
+          /* Dashboard listing table → card view on mobile */
+          .db-listing-row { grid-template-columns: 1fr !important; }
+          .db-listings-table-head { display: none !important; }
+          .db-metric-cell { display: inline-flex !important; flex-direction: column !important; align-items: center !important; }
+          .db-metric-label { display: block !important; }
+          .db-listing-row-meta { display: flex !important; flex-wrap: wrap !important; gap: 12px !important; padding-top: 8px !important; border-top: 1px solid #f2f2f6 !important; }
+          .db-listing-status { justify-content: flex-start !important; }
+        }
+
+        @media (max-width: 480px) {
+          /* Dashboard stat grid: 2 per row */
+          .db-stat-grid { grid-template-columns: 1fr 1fr !important; }
+          /* Charts in dashboard: full width */
+          .db-charts-grid { grid-template-columns: 1fr !important; }
+          .db-insights-grid { grid-template-columns: 1fr !important; }
+        }
+
+        @media (max-width: 360px) {
+          /* Dashboard: stack to 1 col */
+          .db-stat-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

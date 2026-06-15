@@ -415,7 +415,7 @@ export default function PublicProfileRoute({
 
               {/* Action buttons */}
               {isOwnProfile ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div className="pub-profile-actions" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <ActionBtn variant="primary" icon="✏️" onClick={() => window.location.hash = "/profile"}>
                     Edit My Profile
                   </ActionBtn>
@@ -424,7 +424,7 @@ export default function PublicProfileRoute({
                   </ActionBtn>
                 </div>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div className="pub-profile-actions" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <ActionBtn
                     variant={isFollowing ? "green" : "primary"}
                     icon={isFollowing ? "✅" : "➕"}

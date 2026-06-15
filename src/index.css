@@ -190,3 +190,23 @@ img, svg, video, canvas {
 @media (max-width: 360px) {
   :root { font-size: 14px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE VIEWPORT — prevent horizontal bleed on all real devices
+   ═══════════════════════════════════════════════════════════════════════════ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Inputs: 16px prevents iOS Safari zoom */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

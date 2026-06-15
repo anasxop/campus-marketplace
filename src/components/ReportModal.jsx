@@ -71,6 +71,7 @@ export default function ReportModal({
 
   return (
     <div
+      className="modal-overlay"
       style={{ position: "fixed", inset: 0, background: "rgba(14,0,40,0.55)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 24 }}
       onClick={onClose}
     >

@@ -316,6 +316,7 @@ export default function ProfileRoute({
             </div>
 
             <button
+              className="profile-view-profile-btn"
               title="View your public profile"
               style={{ padding: "9px 18px", background: c.purpleBg, color: c.purple, border: `1.5px solid ${c.purpleBorder}`, borderRadius: 11, fontFamily: "'DM Sans', system-ui, sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", gap: 7, whiteSpace: "nowrap", transition: "all 160ms ease" }}
               onMouseEnter={e => { e.currentTarget.style.background = "#ece0fd"; }}

@@ -136,7 +136,7 @@ export default function UniversityDropdown({
           boxShadow: "0 16px 48px rgba(92,34,212,0.18)",
           zIndex: 9999,
           overflow: "hidden",
-          maxHeight: 260,
+          maxHeight: 240,
           overflowY: "auto",
           scrollBehavior: "smooth",
         }}

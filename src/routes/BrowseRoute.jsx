@@ -62,7 +62,7 @@ function CollegeFilterDropdown({ value, onChange }) {
   const placeholder = value === "All Campuses" ? "🌐 All Campuses" : `🎓 ${value}`;
 
   const dropdownPortal = open && rect && createPortal(
-    <div ref={portalRef} style={{ position: "fixed", top: rect.bottom + 6, left: rect.left, width: rect.width, background: "#fff", borderRadius: 14, border: "1.5px solid #e0d0fd", boxShadow: "0 16px 48px rgba(92,34,212,0.22)", zIndex: 99999, maxHeight: 280, overflowY: "auto", overflowX: "hidden" }}>
+    <div ref={portalRef} style={{ position: "fixed", top: rect.bottom + 6, left: Math.max(8, rect.left), width: Math.min(rect.width, window.innerWidth - 16), background: "#fff", borderRadius: 14, border: "1.5px solid #e0d0fd", boxShadow: "0 16px 48px rgba(92,34,212,0.22)", zIndex: 99999, maxHeight: 280, overflowY: "auto", overflowX: "hidden" }}>
       {filtered.length === 0
         ? <div style={{ padding: "16px 14px", textAlign: "center", fontSize: 13, color: "#9898a8" }}>No campuses found</div>
         : filtered.map(name => {
@@ -86,7 +86,7 @@ function CollegeFilterDropdown({ value, onChange }) {
 
   return (
     <>
-      <div ref={triggerRef} style={{ position: "relative", minWidth: 220 }}>
+      <div ref={triggerRef} style={{ position: "relative", minWidth: "min(220px, 100%)", flex: 1 }}>
         <input type="text"
           style={{ width: "100%", padding: "12px 36px 12px 14px", background: "rgba(255,255,255,0.97)", color: "#14141f", fontSize: 14, border: focused ? "1.5px solid #5c22d4" : "1.5px solid transparent", borderRadius: 12, outline: "none", fontFamily: "'DM Sans', system-ui, sans-serif", boxSizing: "border-box", boxShadow: focused ? "0 0 0 3px rgba(92,34,212,0.20)" : "0 4px 16px rgba(14,0,40,0.16)", transition: "border-color 180ms ease, box-shadow 180ms ease", cursor: "text" }}
           value={query}
