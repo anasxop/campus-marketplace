@@ -76,7 +76,7 @@ function TrustBadge({ label, emoji, color, bg, border }) {
 // ── Stat pill ─────────────────────────────────────────────────────────────────
 function StatPill({ value, label, accent }) {
   return (
-    <div style={{ textAlign: "center", padding: "16px 12px", minWidth: 80 }}>
+    <div className="pub-stat-pill" style={{ textAlign: "center", padding: "16px 12px", minWidth: 80 }}>
       <div style={{ fontFamily: "'Syne', system-ui, sans-serif", fontWeight: 800, fontSize: 22, color: accent || "#14141f", lineHeight: 1 }}>
         {value}
       </div>
@@ -371,7 +371,7 @@ export default function PublicProfileRoute({
           <div>
 
             {/* Profile card */}
-            <div style={{ background: "#fff", borderRadius: 24, border: "1px solid #e5e5ec", boxShadow: "0 8px 40px rgba(14,0,40,0.12)", padding: "28px 24px", marginBottom: 20, animation: "fadeUp 0.4s ease both" }}>
+            <div className="pub-profile-card" style={{ background: "#fff", borderRadius: 24, border: "1px solid #e5e5ec", boxShadow: "0 8px 40px rgba(14,0,40,0.12)", padding: "28px 24px", marginBottom: 20, animation: "fadeUp 0.4s ease both" }}>
 
               {/* Avatar + name */}
               <div style={{ textAlign: "center", marginBottom: 20 }}>
@@ -405,7 +405,7 @@ export default function PublicProfileRoute({
               </div>
 
               {/* Real stats row */}
-              <div style={{ display: "flex", justifyContent: "center", gap: 0, borderTop: "1px solid #f2f2f6", borderBottom: "1px solid #f2f2f6", margin: "0 -8px 18px" }}>
+              <div className="pub-stat-row" style={{ display: "flex", justifyContent: "center", gap: 0, borderTop: "1px solid #f2f2f6", borderBottom: "1px solid #f2f2f6", margin: "0 -8px 18px" }}>
                 <StatPill value={activeListings.length} label="Active" accent="#5c22d4" />
                 <div style={{ width: 1, background: "#f2f2f6", alignSelf: "stretch" }} />
                 <StatPill value={soldListings.length} label="Sold" accent="#059669" />

@@ -1410,14 +1410,48 @@ export default function App() {
 
           /* ── Public profile ──────────────────────────────────────────── */
           .pubprofile-hero { padding: 24px 16px 80px !important; }
-          .pubprofile-content { padding: 0 16px !important; margin-top: -52px !important; }
+          .pubprofile-content {
+            padding: 0 12px !important;
+            margin-top: -52px !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+            overflow-x: hidden !important;
+          }
           .pub-profile-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
           .pubprofile-listing-grid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px !important;
           }
-          .pub-stat-row { flex-wrap: wrap !important; }
-          .pub-profile-actions button { width: 100% !important; justify-content: center !important; }
+          /* Profile card: centered, full width, tighter padding */
+          .pub-profile-card {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 22px 16px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+          }
+          /* Stats row: reset negative margin, shrink pills to fit */
+          .pub-stat-row {
+            margin: 0 0 18px !important;
+            flex-wrap: nowrap !important;
+            overflow: hidden !important;
+          }
+          .pub-stat-pill {
+            min-width: 0 !important;
+            flex: 1 !important;
+            padding: 12px 4px !important;
+          }
+          /* Action buttons: full-width, centered */
+          .pub-profile-actions { width: 100% !important; }
+          .pub-profile-actions button {
+            width: 100% !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+          }
+          .pub-profile-actions > div[style] {
+            width: 100% !important;
+            box-sizing: border-box !important;
+          }
           /* Back + "your public profile" badge: stack on mobile */
           .pubprofile-hero-topbar { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
           .pubprofile-hero-topbar button,
