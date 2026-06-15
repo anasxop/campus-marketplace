@@ -563,7 +563,7 @@ export default function App() {
         </span>
 
         {/* Desktop: campus selector sits between logo and nav links */}
-        <div className="nav-campus-selector nav-campus-desktop" style={{ position: "relative", flexShrink: 0 }}>
+        <div className="nav-campus-selector nav-campus-desktop" style={{ position: "relative", flexShrink: 0, marginLeft: 10 }}>
             <div
               className="nav-campus-trigger"
               style={{
@@ -1283,7 +1283,6 @@ export default function App() {
           .nav-desktop-right { display: none !important; }
           .nav-campus-desktop { display: none !important; }
           .nav-mobile-right  { display: flex !important; }
-          .nav-logo { padding-left: 10px !important; }
         }
         @media (min-width: 769px) {
           .nav-mobile-drawer { display: none !important; }
