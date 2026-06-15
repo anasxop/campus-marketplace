@@ -1,5 +1,7 @@
 const SESSION_STORAGE_KEY = "campusPlaceSessionToken";
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5001";
+const API_BASE_URL =
+  (import.meta.env.VITE_API_URL || "http://127.0.0.1:5001")
+    .replace(/\/+$/, "");
 
 const readJson = async (response) => {
   const data = await response.json().catch(() => ({}));
